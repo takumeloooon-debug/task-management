@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>タスク管理アプリ</title>
+
+  <style>
+
+    /* ===== 全体 ===== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f7f7fb;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+
+    /* ===== カード ===== */
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+
+    /* ===== タスク入力 ===== */
+
+    .task-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a78bfa;
+    }
+
+
+    /* ===== ボタン ===== */
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    .add-btn {
+      background: #a78bfa;
+      color: white;
+      font-weight: bold;
+    }
+
+    .edit-btn {
+      background: #eee9ff;
+      color: #7354c5;
+    }
+
+    .archive-btn {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .delete-btn {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .restore-btn {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+
+    /* ===== タスク一覧 ===== */
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+
+      padding: 16px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-text {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 15px;
+    }
+
+    .task-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+
+    /* ===== アーカイブ ===== */
+
+    .archived-text {
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .archive-date {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+
+    /* ===== 空の状態 ===== */
+
+    .empty-message {
+      color: #aaa;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+
+    /* ===== スマホ対応 ===== */
+
+    @media (max-width: 600px) {
+
+      .container {
+        margin: 15px auto;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .task-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .task-buttons {
+        justify-content: flex-end;
+      }
+
+      .task-buttons button {
+        padding: 8px 12px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="container">
+
+    <h1>タスク管理</h1>
+
+    <p class="subtitle">
+      今日やることを決めて、一つずつ進めよう。
+    </p>
+
+
+    <!-- ===== タスク登録 ===== -->
+
+    <div class="card">
+
+      <h2>新しいタスク</h2>
+
+      <form class="task-input" id="taskForm">
+
+        <input
+          type="text"
+          id="taskInput"
+          placeholder="タスクを入力..."
+          maxlength="200"
+          required
+        >
+
+        <button
+          type="submit"
+          class="add-btn"
+        >
+          追加
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- ===== タスク一覧 ===== -->
+
+    <div class="card">
+
+      <h2>進行中のタスク</h2>
+
+      <div id="taskList"></div>
+
+    </div>
+
+
+    <!-- ===== アーカイブ ===== -->
+
+    <div class="card">
+
+      <h2>アーカイブ</h2>
+
+      <div id="archiveList"></div>
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+    // ===================================
+    // ① データの読み込み
+    // ===================================
+
+    let tasks = [];
+
+    try {
+
+      const savedTasks = JSON.parse(
+        localStorage.getItem("tasks") || "[]"
+      );
+
+      tasks = Array.isArray(savedTasks)
+        ? savedTasks
+        : [];
+
+    } catch (error) {
+
+      console.error("タスクの読み込みに失敗しました", error);
+
+    }
+
+
+    // ===================================
+    // ② データ保存
+    // ===================================
+
+    function saveTasks() {
+
+      localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+      );
+
+    }
+
+
+
+    // ===================================
+    // ③ タスク登録
+    // ===================================
+
+    function addTask() {
+
+      const input = document.getElementById("taskInput");
+
+      const text = input.value.trim();
+
+      if (text === "") {
+        return;
+      }
+
+
+      const newTask = {
+
+        id: crypto.randomUUID(),
+
+        text: text,
+
+        archived: false,
+
+        createdAt: new Date().toISOString(),
+
+        archivedAt: null
+
+      };
+
+
+      tasks.push(newTask);
+
+
+      saveTasks();
+
+      renderTasks();
+
+
+      input.value = "";
+
+      input.focus();
+
+    }
+
+
+
+    // ===================================
+    // ④ タスク編集
+    // ===================================
+
+    function editTask(id) {
+
+      const task = tasks.find(
+        task => task.id === id
+      );
+
+      if (!task) {
+        return;
+      }
+
+
+      const newText = prompt(
+        "タスクを編集してください",
+        task.text
+      );
+
+
+      if (newText === null) {
+        return;
+      }
+
+
+      const trimmedText = newText.trim();
+
+      if (trimmedText === "") {
+        alert("タスクを入力してください");
+        return;
+      }
+
+      if (trimmedText.length > 200) {
+        alert("タスクは200文字以内で入力してください");
+        return;
+      }
+
+
+      task.text = trimmedText;
+
+
+      saveTasks();
+
+      renderTasks();
+
+    }
+
+
+
+    // ===================================
+    // ⑤ タスク削除
+    // ===================================
+
+    function deleteTask(id) {
+
+      const confirmed = confirm(
+        "このタスクを削除しますか？"
+      );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      tasks = tasks.filter(
+        task => task.id !== id
+      );
+
+
+      saveTasks();
+
+      renderTasks();
+
+    }
+
+
+
+    // ===================================
+    // ⑥ アーカイブ
+    // ===================================
+
+    function archiveTask(id) {
+
+      const task = tasks.find(
+        task => task.id === id
+      );
+
+
+      if (!task) {
+        return;
+      }
+
+
+      task.archived = true;
+
+      task.archivedAt = new Date().toISOString();
+
+
+      saveTasks();
+
+      renderTasks();
+
+    }
+
+
+
+    // ===================================
+    // ⑦ アーカイブから戻す
+    // ===================================
+
+    function restoreTask(id) {
+
+      const task = tasks.find(
+        task => task.id === id
+      );
+
+
+      if (!task) {
+        return;
+      }
+
+
+      task.archived = false;
+
+      task.archivedAt = null;
+
+
+      saveTasks();
+
+      renderTasks();
+
+    }
+
+
+
+    // ===================================
+    // ⑧ タスク一覧を表示
+    // ===================================
+
+    function renderTasks() {
+
+      const taskList = document.getElementById("taskList");
+
+      const archiveList = document.getElementById("archiveList");
+
+
+      // 表示内容をリセット
+
+      taskList.innerHTML = "";
+
+      archiveList.innerHTML = "";
+
+
+      // 進行中とアーカイブ済みに分類
+
+      const activeTasks = tasks.filter(
+        task => !task.archived
+      );
+
+      const archivedTasks = tasks.filter(
+        task => task.archived
+      );
+
+
+      // ===== 進行中のタスク =====
+
+      if (activeTasks.length === 0) {
+
+        taskList.innerHTML = `
+          <p class="empty-message">
+            タスクはありません
+          </p>
+        `;
+
+      }
+
+
+      activeTasks.forEach(task => {
+
+        const item = document.createElement("div");
+
+        item.className = "task-item";
+
+
+        const text = document.createElement("div");
+
+        text.className = "task-text";
+
+        text.textContent = task.text;
+
+
+        const buttons = document.createElement("div");
+
+        buttons.className = "task-buttons";
+
+
+        const editButton = document.createElement("button");
+
+        editButton.className = "edit-btn";
+
+        editButton.textContent = "編集";
+
+        editButton.addEventListener("click", () => {
+          editTask(task.id);
+        });
+
+
+        const archiveButton = document.createElement("button");
+
+        archiveButton.className = "archive-btn";
+
+        archiveButton.textContent = "完了";
+
+        archiveButton.addEventListener("click", () => {
+          archiveTask(task.id);
+        });
+
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "delete-btn";
+
+        deleteButton.textContent = "削除";
+
+        deleteButton.addEventListener("click", () => {
+          deleteTask(task.id);
+        });
+
+
+        buttons.append(
+          editButton,
+          archiveButton,
+          deleteButton
+        );
+
+
+        item.append(
+          text,
+          buttons
+        );
+
+
+        taskList.appendChild(item);
+
+      });
+
+
+
+      // ===== アーカイブ済みのタスク =====
+
+      if (archivedTasks.length === 0) {
+
+        archiveList.innerHTML = `
+          <p class="empty-message">
+            アーカイブされたタスクはありません
+          </p>
+        `;
+
+      }
+
+
+      archivedTasks.forEach(task => {
+
+        const item = document.createElement("div");
+
+        item.className = "task-item";
+
+
+        const textContainer = document.createElement("div");
+
+        textContainer.className = "task-text";
+
+
+        const text = document.createElement("div");
+
+        text.className = "archived-text";
+
+        text.textContent = task.text;
+
+
+        const date = document.createElement("div");
+
+        date.className = "archive-date";
+
+
+        if (task.archivedAt) {
+
+          date.textContent =
+            "完了日：" +
+            new Date(task.archivedAt).toLocaleDateString("ja-JP");
+
+        }
+
+
+        textContainer.append(
+          text,
+          date
+        );
+
+
+        const buttons = document.createElement("div");
+
+        buttons.className = "task-buttons";
+
+
+        const restoreButton = document.createElement("button");
+
+        restoreButton.className = "restore-btn";
+
+        restoreButton.textContent = "戻す";
+
+        restoreButton.addEventListener("click", () => {
+          restoreTask(task.id);
+        });
+
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.className = "delete-btn";
+
+        deleteButton.textContent = "削除";
+
+        deleteButton.addEventListener("click", () => {
+          deleteTask(task.id);
+        });
+
+
+        buttons.append(
+          restoreButton,
+          deleteButton
+        );
+
+
+        item.append(
+          textContainer,
+          buttons
+        );
+
+
+        archiveList.appendChild(item);
+
+      });
+
+    }
+
+
+
+    // ===================================
+    // ⑨ 登録ボタン・Enterキーの処理
+    // ===================================
+
+    document.getElementById("taskForm")
+      .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        addTask();
+
+      });
+
+
+
+    // ===================================
+    // ⑩ 初期表示
+    // ===================================
+
+    renderTasks();
+
+
+  </script>
+
+</body>
+
+</html>
