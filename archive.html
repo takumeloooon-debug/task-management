@@ -244,39 +244,26 @@
     const today = new Date().toLocaleDateString("sv-SE");
 
 
-
     // ===================================
-    // ③ 過去に完了したタスクを取得
-    // ===================================
+// ③ 完了済みのタスクをすべて取得
+// ===================================
 
-    const archivedTasks = tasks.filter(task => {
+const archivedTasks = tasks.filter(task => {
 
-      // アーカイブされていなければ除外
+  // アーカイブされていなければ除外
+  if (!task.archived) {
+    return false;
+  }
 
-      if (!task.archived) {
-        return false;
-      }
+  // 完了日時がなければ除外
+  if (!task.archivedAt) {
+    return false;
+  }
 
+  // 今日を含めたすべての完了済みタスクを取得
+  return true;
 
-      // 完了日時がなければ除外
-
-      if (!task.archivedAt) {
-        return false;
-      }
-
-
-      // 完了日を取得
-
-      const archivedDate = new Date(
-        task.archivedAt
-      ).toLocaleDateString("sv-SE");
-
-
-      // 今日より前の日付なら取得
-
-      return archivedDate < today;
-
-    });
+});
 
 
 
