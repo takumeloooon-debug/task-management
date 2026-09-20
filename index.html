@@ -210,6 +210,34 @@
 
     }
 
+    /* ===== 過去の記録へのリンク ===== */
+
+.archive-link {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.archive-link a {
+  display: inline-block;
+
+  padding: 12px 20px;
+
+  background: #eee9ff;
+  color: #7354c5;
+
+  text-decoration: none;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.archive-link a:hover {
+  background: #ddd3ff;
+}
+
   </style>
 
 </head>
@@ -526,9 +554,35 @@
         task => !task.archived
       );
 
-      const archivedTasks = tasks.filter(
-        task => task.archived
-      );
+      // ===== 今日の日付を取得 =====
+
+const today = new Date().toLocaleDateString("sv-SE");
+
+
+// ===== 今日完了したタスクを取得 =====
+
+const archivedTasks = tasks.filter(task => {
+
+  // アーカイブ済みでなければ除外
+  if (!task.archived) {
+    return false;
+  }
+
+  // 完了日時がなければ除外
+  if (!task.archivedAt) {
+    return false;
+  }
+
+  // 完了日を取得
+  const archivedDate = new Date(
+    task.archivedAt
+  ).toLocaleDateString("sv-SE");
+
+
+  // 今日の日付と一致するか判定
+  return archivedDate === today;
+
+});
 
 
       // ===== 進行中のタスク =====
