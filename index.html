@@ -294,6 +294,97 @@
 
     }
 
+    /* ===================================
+   キャラクター育成画面
+=================================== */
+
+.character-card {
+  text-align: center;
+}
+
+
+/* キャラクター表示 */
+
+.character-area {
+  padding: 20px 0;
+}
+
+.character-icon {
+  font-size: 70px;
+  margin-bottom: 10px;
+}
+
+.character-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.character-level {
+  font-size: 22px;
+  font-weight: bold;
+  color: #7354c5;
+}
+
+
+/* ===================================
+   経験値ゲージ
+=================================== */
+
+.exp-area {
+  margin-top: 20px;
+}
+
+.exp-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 14px;
+  background: #eee9ff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  width: 0%;
+  height: 100%;
+  background: #a78bfa;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+
+/* ===================================
+   累計経験値
+=================================== */
+
+.total-exp {
+  font-size: 12px;
+  color: #888;
+  margin-top: 12px;
+}
+
+
+/* ===================================
+   レベルアップ通知
+=================================== */
+
+.level-message {
+  font-size: 15px;
+  font-weight: bold;
+  color: #7354c5;
+  margin-top: 15px;
+}
+
+.level-message:empty {
+  display: none;
+}
+
   </style>
 
 </head>
@@ -315,6 +406,72 @@
       今日やることを決めて、一つずつ進めよう。
     </p>
 
+    <!-- ===================================
+     キャラクター育成画面
+=================================== -->
+
+<div class="card character-card">
+
+  <h2>キャラクター育成</h2>
+
+  <!-- キャラクター表示 -->
+
+  <div class="character-area">
+
+    <div id="characterIcon" class="character-icon">
+      💧
+    </div>
+
+    <div id="characterName" class="character-name">
+      スライム
+    </div>
+
+    <div id="characterLevel" class="character-level">
+      Lv.1
+    </div>
+
+  </div>
+
+
+  <!-- 経験値ゲージ -->
+
+  <div class="exp-area">
+
+    <div class="exp-info">
+
+      <span>EXP</span>
+
+      <span id="expText">
+        0 / 200
+      </span>
+
+    </div>
+
+
+    <div class="exp-bar">
+
+      <div
+        id="expFill"
+        class="exp-fill"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 累計経験値 -->
+
+  <p id="totalExp" class="total-exp">
+    累計経験値：0 EXP
+  </p>
+
+
+  <!-- レベルアップ通知 -->
+
+  <p id="levelMessage" class="level-message"></p>
+
+</div>
 
 
     <!-- ===================================
@@ -495,6 +652,402 @@
 
     }
 
+    // ===================================
+// 経験値データの読み込み
+// ===================================
+
+const EXP_STORAGE_KEY = "taskAppExp";
+
+let expData = {
+  totalExp: 0,
+  dailyRecords: {}
+};
+
+
+// 保存済みの経験値データを読み込む
+
+try {
+
+  const savedExp = JSON.parse(
+    localStorage.getItem(EXP_STORAGE_KEY) || "null"
+  );
+
+  if (savedExp) {
+
+    expData = savedExp;
+
+  }
+
+} catch (error) {
+
+  console.error(
+    "経験値データの読み込みに失敗しました",
+    error
+  );
+
+}
+
+
+// 経験値データを保存する
+
+function saveExpData() {
+
+  localStorage.setItem(
+    EXP_STORAGE_KEY,
+    JSON.stringify(expData)
+  );
+
+}
+
+    // ===================================
+// レベルアップに必要な累計経験値
+// ===================================
+
+const levelTable = [
+
+  0,      // Lv.1
+
+  100,    // Lv.2
+  300,    // Lv.3
+  500,    // Lv.4
+  700,    // Lv.5
+
+  900,    // Lv.6
+  1100,   // Lv.7
+  1300,   // Lv.8
+  1500,   // Lv.9
+  1700,   // Lv.10
+
+  1900,   // Lv.11
+  2100,   // Lv.12
+  2400,   // Lv.13
+  2700,   // Lv.14
+  3000,   // Lv.15
+
+  3300,   // Lv.16
+  3700,   // Lv.17
+  4100,   // Lv.18
+  4500,   // Lv.19
+  4900,   // Lv.20
+
+  5300,   // Lv.21
+  5700,   // Lv.22
+  6100,   // Lv.23
+  6500,   // Lv.24
+  6900,   // Lv.25
+
+  7300,   // Lv.26
+  7700,   // Lv.27
+  8100,   // Lv.28
+  8500,   // Lv.29
+  9000,   // Lv.30
+
+  9600,   // Lv.31
+  10200,  // Lv.32
+  10800,  // Lv.33
+  11400,  // Lv.34
+  12000,  // Lv.35
+
+  12700,  // Lv.36
+  13400,  // Lv.37
+  14100,  // Lv.38
+  14800,  // Lv.39
+  15500,  // Lv.40
+
+  16200,  // Lv.41
+  16900,  // Lv.42
+  18000,  // Lv.43
+
+  19500,  // Lv.44
+  21000,  // Lv.45
+  23500,  // Lv.46
+  26000,  // Lv.47
+  29000,  // Lv.48
+  32500,  // Lv.49
+  36500   // Lv.50
+
+];
+
+    // ===================================
+// 現在のレベルを計算
+// ===================================
+
+function calculateLevel(totalExp) {
+
+  let level = 1;
+
+
+  for (let i = 0; i < levelTable.length; i++) {
+
+    if (totalExp >= levelTable[i]) {
+
+      level = i + 1;
+
+    } else {
+
+      break;
+
+    }
+
+  }
+
+
+  return level;
+
+}
+
+    // ===================================
+// キャラクターの進化段階
+// ===================================
+
+function getCharacter(level) {
+
+  if (level >= 50) {
+
+    return {
+      name: "伝説のドラゴン",
+      icon: "🐲"
+    };
+
+  }
+
+
+  if (level >= 43) {
+
+    return {
+      name: "ドラゴン",
+      icon: "🐉"
+    };
+
+  }
+
+
+  if (level >= 30) {
+
+    return {
+      name: "ドラゴンの幼体",
+      icon: "🥚"
+    };
+
+  }
+
+
+  if (level >= 15) {
+
+    return {
+      name: "スライムキング",
+      icon: "👑"
+    };
+
+  }
+
+
+  if (level >= 5) {
+
+    return {
+      name: "成長したスライム",
+      icon: "💙"
+    };
+
+  }
+
+
+  return {
+    name: "スライム",
+    icon: "💧"
+  };
+
+}
+
+    // ===================================
+// 経験値獲得
+// ===================================
+
+function gainExp(taskId) {
+
+  const today = new Date().toLocaleDateString("sv-SE");
+
+
+  // 今日の記録がなければ作成
+
+  if (!expData.dailyRecords[today]) {
+
+    expData.dailyRecords[today] = {
+
+      completedCount: 0,
+
+      earnedExp: 0,
+
+      rewardedTaskIds: []
+
+    };
+
+  }
+
+
+  const record = expData.dailyRecords[today];
+
+// 過去の日付も含め、同じタスクで経験値を獲得済みか確認する
+
+const alreadyRewarded = Object.values(
+  expData.dailyRecords
+).some(record => {
+
+  return (record.rewardedTaskIds || []).includes(taskId);
+
+});
+
+if (alreadyRewarded) {
+  return 0;
+}
+
+
+  // 今日の完了数を取得
+
+  const completedCount = record.completedCount;
+
+
+  // 獲得経験値を決定
+
+  let gainedExp = 0;
+
+
+  if (completedCount === 0) {
+
+    gainedExp = 100;
+
+  } else if (completedCount === 1) {
+
+    gainedExp = 5;
+
+  } else if (completedCount === 2) {
+
+    gainedExp = 5;
+
+  }
+
+
+  // 完了数を更新
+
+  record.completedCount += 1;
+
+
+  // 経験値を獲得したタスクを記録
+
+  record.rewardedTaskIds.push(taskId);
+
+
+  // 経験値を更新
+
+  record.earnedExp += gainedExp;
+
+  expData.totalExp += gainedExp;
+
+
+  // データを保存
+
+  saveExpData();
+
+
+  return gainedExp;
+
+}
+
+    // ===================================
+// 育成画面を更新
+// ===================================
+
+function renderCharacter() {
+
+  const totalExp = expData.totalExp;
+
+
+  // 現在のレベル
+
+  const level = calculateLevel(totalExp);
+
+
+  // キャラクターの情報
+
+  const character = getCharacter(level);
+
+
+  // キャラクター表示
+
+  document.getElementById("characterIcon").textContent =
+    character.icon;
+
+
+  document.getElementById("characterName").textContent =
+    character.name;
+
+
+  document.getElementById("characterLevel").textContent =
+    "Lv." + level;
+
+
+
+  // ===================================
+  // 経験値ゲージ
+  // ===================================
+
+  const currentLevelExp = levelTable[level - 1];
+
+
+  // 最大レベルの場合
+
+  if (level === 50) {
+
+    document.getElementById("expText").textContent =
+      "MAX LEVEL";
+
+
+    document.getElementById("expFill").style.width =
+      "100%";
+
+  } else {
+
+    // 次のレベルに必要な累計経験値
+
+    const nextLevelExp = levelTable[level];
+
+
+    // 現在のレベル内で獲得した経験値
+
+    const currentExp = totalExp - currentLevelExp;
+
+
+    // 次のレベルまでに必要な経験値
+
+    const requiredExp = nextLevelExp - currentLevelExp;
+
+
+    // 経験値ゲージの割合
+
+    const expPercent =
+      (currentExp / requiredExp) * 100;
+
+
+    // 画面に反映
+
+    document.getElementById("expText").textContent =
+      currentExp + " / " + requiredExp;
+
+
+    document.getElementById("expFill").style.width =
+      expPercent + "%";
+
+  }
+
+
+
+  // 累計経験値
+
+  document.getElementById("totalExp").textContent =
+    "累計経験値：" + totalExp + " EXP";
+
+}
+
 
 
     // ===================================
@@ -650,35 +1203,94 @@
 
     }
 
+// ===================================
+// タスク完了
+// ===================================
+
+function archiveTask(id) {
+
+  const task = tasks.find(
+    task => task.id === id
+  );
 
 
-    // ===================================
-    // ⑥ タスク完了
-    // ===================================
-
-    function archiveTask(id) {
-
-      const task = tasks.find(
-        task => task.id === id
-      );
+  if (!task) {
+    return;
+  }
 
 
-      if (!task) {
-        return;
-      }
+  // すでに完了している場合は処理しない
+
+  if (task.archived) {
+    return;
+  }
 
 
-      task.archived = true;
+  // 完了前のレベルを取得
 
-      task.archivedAt = new Date().toISOString();
+  const oldLevel = calculateLevel(
+    expData.totalExp
+  );
 
 
-      saveTasks();
+  // タスクを完了状態にする
 
-      renderTasks();
+  task.archived = true;
 
-    }
+  task.archivedAt = new Date().toISOString();
 
+
+  // タスクを保存
+
+  saveTasks();
+
+
+  // 経験値を獲得
+
+  const gainedExp = gainExp(id);
+
+
+  // 完了後のレベルを取得
+
+  const newLevel = calculateLevel(
+    expData.totalExp
+  );
+
+
+  // タスク一覧を更新
+
+  renderTasks();
+
+
+  // キャラクター表示を更新
+
+  renderCharacter();
+
+
+  // ===================================
+  // レベルアップ通知
+  // ===================================
+
+  const message = document.getElementById(
+    "levelMessage"
+  );
+
+
+  if (newLevel > oldLevel) {
+
+    message.textContent =
+      "🎉 LEVEL UP！ Lv." + newLevel;
+
+  } else {
+
+    message.textContent =
+      "+" + gainedExp + " EXP 獲得！";
+
+  }
+
+}
+
+  
 
 
     // ===================================
@@ -1178,6 +1790,8 @@
     renderTasks();
 
     showWeekRange();
+
+    renderCharacter();
 
 
   </script>
