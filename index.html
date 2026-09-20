@@ -2,14 +2,22 @@
 <html lang="ja">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>タスク管理アプリ</title>
 
+
   <style>
 
-    /* ===== 全体 ===== */
+    /* ===================================
+       全体
+    =================================== */
 
     * {
       box-sizing: border-box;
@@ -40,7 +48,9 @@
     }
 
 
-    /* ===== カード ===== */
+    /* ===================================
+       カード
+    =================================== */
 
     .card {
       background: white;
@@ -57,29 +67,56 @@
     }
 
 
-    /* ===== タスク入力 ===== */
+    /* ===================================
+       タスク入力
+    =================================== */
 
-    .task-input {
-      display: flex;
-      gap: 10px;
-    }
-
-    input {
-      flex: 1;
+    #taskInput {
+      display: block;
+      width: 100%;
       min-width: 0;
       padding: 12px;
       border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 16px;
+      margin-bottom: 15px;
     }
 
-    input:focus {
+    #taskInput:focus {
       outline: none;
       border-color: #a78bfa;
     }
 
 
-    /* ===== ボタン ===== */
+    /* ===================================
+       タスクの種類
+    =================================== */
+
+    .task-type {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .task-type label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .task-type input {
+      flex: none;
+      width: auto;
+      margin: 0;
+      accent-color: #a78bfa;
+    }
+
+
+    /* ===================================
+       ボタン
+    =================================== */
 
     button {
       border: none;
@@ -98,6 +135,7 @@
       background: #a78bfa;
       color: white;
       font-weight: bold;
+      padding: 12px 24px;
     }
 
     .edit-btn {
@@ -120,15 +158,21 @@
       color: #0369a1;
     }
 
+    .move-btn {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
 
-    /* ===== タスク一覧 ===== */
+
+    /* ===================================
+       タスク一覧
+    =================================== */
 
     .task-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-
       padding: 16px 0;
       border-bottom: 1px solid #eee;
     }
@@ -150,7 +194,38 @@
       flex-wrap: wrap;
     }
 
-    /* ===== 空の状態 ===== */
+
+    /* ===================================
+       アーカイブ
+    =================================== */
+
+    .archived-text {
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .archive-date {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+
+    /* ===================================
+       今週の日付
+    =================================== */
+
+    .week-range {
+      font-size: 13px;
+      color: #888;
+      margin-top: -10px;
+      margin-bottom: 20px;
+    }
+
+
+    /* ===================================
+       空の状態
+    =================================== */
 
     .empty-message {
       color: #aaa;
@@ -160,7 +235,35 @@
     }
 
 
-    /* ===== スマホ対応 ===== */
+    /* ===================================
+       過去の記録へのリンク
+    =================================== */
+
+    .archive-link {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    .archive-link a {
+      display: inline-block;
+      padding: 12px 20px;
+      background: #eee9ff;
+      color: #7354c5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .archive-link a:hover {
+      background: #ddd3ff;
+    }
+
+
+    /* ===================================
+       スマホ対応
+    =================================== */
 
     @media (max-width: 600px) {
 
@@ -185,44 +288,26 @@
         padding: 8px 12px;
       }
 
+      .task-type {
+        gap: 15px;
+      }
+
     }
-
-    /* ===== 過去の記録へのリンク ===== */
-
-.archive-link {
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
-
-.archive-link a {
-  display: inline-block;
-
-  padding: 12px 20px;
-
-  background: #eee9ff;
-  color: #7354c5;
-
-  text-decoration: none;
-
-  border-radius: 8px;
-
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.archive-link a:hover {
-  background: #ddd3ff;
-}
 
   </style>
 
 </head>
 
 
+
 <body>
 
   <div class="container">
+
+
+    <!-- ===================================
+         タイトル
+    =================================== -->
 
     <h1>タスク管理</h1>
 
@@ -231,13 +316,19 @@
     </p>
 
 
-    <!-- ===== タスク登録 ===== -->
+
+    <!-- ===================================
+         タスク登録
+    =================================== -->
 
     <div class="card">
 
       <h2>新しいタスク</h2>
 
-      <form class="task-input" id="taskForm">
+      <form id="taskForm">
+
+
+        <!-- タスク入力 -->
 
         <input
           type="text"
@@ -247,11 +338,49 @@
           required
         >
 
+
+        <!-- タスクの種類を選択 -->
+
+        <div class="task-type">
+
+          <label>
+
+            <input
+              type="radio"
+              name="taskType"
+              value="today"
+              checked
+            >
+
+            今日やる
+
+          </label>
+
+
+          <label>
+
+            <input
+              type="radio"
+              name="taskType"
+              value="week"
+            >
+
+            今週中にやる
+
+          </label>
+
+        </div>
+
+
+        <!-- 追加ボタン -->
+
         <button
           type="submit"
           class="add-btn"
         >
+
           追加
+
         </button>
 
       </form>
@@ -259,39 +388,68 @@
     </div>
 
 
-    <!-- ===== タスク一覧 ===== -->
+
+    <!-- ===================================
+         今日やるタスク
+    =================================== -->
 
     <div class="card">
 
-      <h2>進行中のタスク</h2>
+      <h2>今日やるタスク</h2>
 
       <div id="taskList"></div>
 
     </div>
 
 
-    <!-- ===== アーカイブ ===== -->
 
-    <!-- ===== 今日完了したタスク ===== -->
+    <!-- ===================================
+         今週中にやるタスク
+    =================================== -->
 
-<div class="card">
+    <div class="card">
 
-  <h2>今日完了したタスク</h2>
+      <h2>今週中にやるタスク</h2>
 
-  <div id="archiveList"></div>
+      <p
+        id="weekRange"
+        class="week-range"
+      ></p>
 
-</div>
+      <div id="weekTaskList"></div>
+
+    </div>
 
 
-<!-- ===== 過去の記録へのリンク ===== -->
 
-<div class="archive-link">
+    <!-- ===================================
+         今日完了したタスク
+    =================================== -->
 
-  <a href="archive.html">
-    過去の記録を見る →
-  </a>
+    <div class="card">
 
-</div>
+      <h2>今日完了したタスク</h2>
+
+      <div id="archiveList"></div>
+
+    </div>
+
+
+
+    <!-- ===================================
+         過去の記録へのリンク
+    =================================== -->
+
+    <div class="archive-link">
+
+      <a href="archive.html">
+        過去の記録を見る →
+      </a>
+
+    </div>
+
+
+  </div>
 
 
 
@@ -315,9 +473,13 @@
 
     } catch (error) {
 
-      console.error("タスクの読み込みに失敗しました", error);
+      console.error(
+        "タスクの読み込みに失敗しました",
+        error
+      );
 
     }
+
 
 
     // ===================================
@@ -345,16 +507,28 @@
 
       const text = input.value.trim();
 
+
       if (text === "") {
         return;
       }
 
+
+      // 今日やる・今週中にやるの選択を取得
+
+      const taskType = document.querySelector(
+        'input[name="taskType"]:checked'
+      ).value;
+
+
+      // 新しいタスクを作成
 
       const newTask = {
 
         id: crypto.randomUUID(),
 
         text: text,
+
+        taskType: taskType,
 
         archived: false,
 
@@ -365,13 +539,22 @@
       };
 
 
+      // タスク一覧に追加
+
       tasks.push(newTask);
 
 
+      // データ保存
+
       saveTasks();
+
+
+      // 画面更新
 
       renderTasks();
 
+
+      // 入力欄をリセット
 
       input.value = "";
 
@@ -391,6 +574,7 @@
         task => task.id === id
       );
 
+
       if (!task) {
         return;
       }
@@ -409,14 +593,22 @@
 
       const trimmedText = newText.trim();
 
+
       if (trimmedText === "") {
+
         alert("タスクを入力してください");
+
         return;
+
       }
 
+
       if (trimmedText.length > 200) {
+
         alert("タスクは200文字以内で入力してください");
+
         return;
+
       }
 
 
@@ -461,7 +653,7 @@
 
 
     // ===================================
-    // ⑥ アーカイブ
+    // ⑥ タスク完了
     // ===================================
 
     function archiveTask(id) {
@@ -519,12 +711,41 @@
 
 
     // ===================================
-    // ⑧ タスク一覧を表示
+    // ⑧ タスクの種類を変更
+    // ===================================
+
+    function moveTask(id, newType) {
+
+      const task = tasks.find(
+        task => task.id === id
+      );
+
+
+      if (!task) {
+        return;
+      }
+
+
+      task.taskType = newType;
+
+
+      saveTasks();
+
+      renderTasks();
+
+    }
+
+
+
+    // ===================================
+    // ⑨ タスク一覧を表示
     // ===================================
 
     function renderTasks() {
 
       const taskList = document.getElementById("taskList");
+
+      const weekTaskList = document.getElementById("weekTaskList");
 
       const archiveList = document.getElementById("archiveList");
 
@@ -533,137 +754,125 @@
 
       taskList.innerHTML = "";
 
+      weekTaskList.innerHTML = "";
+
       archiveList.innerHTML = "";
 
 
-      // 進行中とアーカイブ済みに分類
+      // ===================================
+      // 今日やるタスク
+      // ===================================
 
-      const activeTasks = tasks.filter(
-        task => !task.archived
-      );
+      const todayTasks = tasks.filter(task => {
 
-      // ===== 今日の日付を取得 =====
+        return !task.archived &&
+          (task.taskType === "today" || !task.taskType);
 
-const today = new Date().toLocaleDateString("sv-SE");
-
-
-// ===== 今日完了したタスクを取得 =====
-
-const archivedTasks = tasks.filter(task => {
-
-  // アーカイブ済みでなければ除外
-  if (!task.archived) {
-    return false;
-  }
-
-  // 完了日時がなければ除外
-  if (!task.archivedAt) {
-    return false;
-  }
-
-  // 完了日を取得
-  const archivedDate = new Date(
-    task.archivedAt
-  ).toLocaleDateString("sv-SE");
+      });
 
 
-  // 今日の日付と一致するか判定
-  return archivedDate === today;
 
-});
+      // ===================================
+      // 今週中にやるタスク
+      // ===================================
+
+      const weekTasks = tasks.filter(task => {
+
+        return !task.archived &&
+          task.taskType === "week";
+
+      });
 
 
-      // ===== 進行中のタスク =====
 
-      if (activeTasks.length === 0) {
+      // ===================================
+      // 今日完了したタスク
+      // ===================================
+
+      const today = new Date().toLocaleDateString("sv-SE");
+
+
+      const archivedTasks = tasks.filter(task => {
+
+        if (!task.archived || !task.archivedAt) {
+          return false;
+        }
+
+
+        const archivedDate = new Date(
+          task.archivedAt
+        ).toLocaleDateString("sv-SE");
+
+
+        return archivedDate === today;
+
+      });
+
+
+
+      // ===================================
+      // 今日やるタスクを表示
+      // ===================================
+
+      if (todayTasks.length === 0) {
 
         taskList.innerHTML = `
           <p class="empty-message">
-            タスクはありません
+            今日やるタスクはありません
           </p>
         `;
 
       }
 
 
-      activeTasks.forEach(task => {
+      todayTasks.forEach(task => {
 
-        const item = document.createElement("div");
-
-        item.className = "task-item";
-
-
-        const text = document.createElement("div");
-
-        text.className = "task-text";
-
-        text.textContent = task.text;
-
-
-        const buttons = document.createElement("div");
-
-        buttons.className = "task-buttons";
-
-
-        const editButton = document.createElement("button");
-
-        editButton.className = "edit-btn";
-
-        editButton.textContent = "編集";
-
-        editButton.addEventListener("click", () => {
-          editTask(task.id);
-        });
-
-
-        const archiveButton = document.createElement("button");
-
-        archiveButton.className = "archive-btn";
-
-        archiveButton.textContent = "完了";
-
-        archiveButton.addEventListener("click", () => {
-          archiveTask(task.id);
-        });
-
-
-        const deleteButton = document.createElement("button");
-
-        deleteButton.className = "delete-btn";
-
-        deleteButton.textContent = "削除";
-
-        deleteButton.addEventListener("click", () => {
-          deleteTask(task.id);
-        });
-
-
-        buttons.append(
-          editButton,
-          archiveButton,
-          deleteButton
+        createTaskElement(
+          task,
+          taskList,
+          "today"
         );
-
-
-        item.append(
-          text,
-          buttons
-        );
-
-
-        taskList.appendChild(item);
 
       });
 
 
 
-      // ===== アーカイブ済みのタスク =====
+      // ===================================
+      // 今週中にやるタスクを表示
+      // ===================================
+
+      if (weekTasks.length === 0) {
+
+        weekTaskList.innerHTML = `
+          <p class="empty-message">
+            今週中にやるタスクはありません
+          </p>
+        `;
+
+      }
+
+
+      weekTasks.forEach(task => {
+
+        createTaskElement(
+          task,
+          weekTaskList,
+          "week"
+        );
+
+      });
+
+
+
+      // ===================================
+      // 今日完了したタスクを表示
+      // ===================================
 
       if (archivedTasks.length === 0) {
 
         archiveList.innerHTML = `
           <p class="empty-message">
-            アーカイブされたタスクはありません
+            今日完了したタスクはありません
           </p>
         `;
 
@@ -694,13 +903,9 @@ const archivedTasks = tasks.filter(task => {
         date.className = "archive-date";
 
 
-        if (task.archivedAt) {
-
-          date.textContent =
-            "完了日：" +
-            new Date(task.archivedAt).toLocaleDateString("ja-JP");
-
-        }
+        date.textContent =
+          "完了日：" +
+          new Date(task.archivedAt).toLocaleDateString("ja-JP");
 
 
         textContainer.append(
@@ -714,6 +919,8 @@ const archivedTasks = tasks.filter(task => {
         buttons.className = "task-buttons";
 
 
+        // 戻すボタン
+
         const restoreButton = document.createElement("button");
 
         restoreButton.className = "restore-btn";
@@ -721,9 +928,14 @@ const archivedTasks = tasks.filter(task => {
         restoreButton.textContent = "戻す";
 
         restoreButton.addEventListener("click", () => {
+
           restoreTask(task.id);
+
         });
 
+
+
+        // 削除ボタン
 
         const deleteButton = document.createElement("button");
 
@@ -732,8 +944,11 @@ const archivedTasks = tasks.filter(task => {
         deleteButton.textContent = "削除";
 
         deleteButton.addEventListener("click", () => {
+
           deleteTask(task.id);
+
         });
+
 
 
         buttons.append(
@@ -757,7 +972,192 @@ const archivedTasks = tasks.filter(task => {
 
 
     // ===================================
-    // ⑨ 登録ボタン・Enterキーの処理
+    // ⑩ タスク表示用の関数
+    // ===================================
+
+    function createTaskElement(task, container, type) {
+
+      const item = document.createElement("div");
+
+      item.className = "task-item";
+
+
+      // タスクの内容
+
+      const text = document.createElement("div");
+
+      text.className = "task-text";
+
+      text.textContent = task.text;
+
+
+
+      // ボタンの入れ物
+
+      const buttons = document.createElement("div");
+
+      buttons.className = "task-buttons";
+
+
+
+      // 編集ボタン
+
+      const editButton = document.createElement("button");
+
+      editButton.className = "edit-btn";
+
+      editButton.textContent = "編集";
+
+      editButton.addEventListener("click", () => {
+
+        editTask(task.id);
+
+      });
+
+
+
+      // 完了ボタン
+
+      const archiveButton = document.createElement("button");
+
+      archiveButton.className = "archive-btn";
+
+      archiveButton.textContent = "完了";
+
+      archiveButton.addEventListener("click", () => {
+
+        archiveTask(task.id);
+
+      });
+
+
+
+      // タスク移動ボタン
+
+      const moveButton = document.createElement("button");
+
+      moveButton.className = "move-btn";
+
+
+      if (type === "today") {
+
+        moveButton.textContent = "今週中に移動";
+
+        moveButton.addEventListener("click", () => {
+
+          moveTask(task.id, "week");
+
+        });
+
+      } else {
+
+        moveButton.textContent = "今日やる";
+
+        moveButton.addEventListener("click", () => {
+
+          moveTask(task.id, "today");
+
+        });
+
+      }
+
+
+
+      // 削除ボタン
+
+      const deleteButton = document.createElement("button");
+
+      deleteButton.className = "delete-btn";
+
+      deleteButton.textContent = "削除";
+
+      deleteButton.addEventListener("click", () => {
+
+        deleteTask(task.id);
+
+      });
+
+
+
+      // ボタンをまとめる
+
+      buttons.append(
+        editButton,
+        archiveButton,
+        moveButton,
+        deleteButton
+      );
+
+
+      // タスクを表示
+
+      item.append(
+        text,
+        buttons
+      );
+
+
+      container.appendChild(item);
+
+    }
+
+
+
+    // ===================================
+    // ⑪ 今週の期間を表示
+    // ===================================
+
+    function showWeekRange() {
+
+      const today = new Date();
+
+
+      // 今週の月曜日を取得
+
+      const monday = new Date(today);
+
+      const day = today.getDay();
+
+      const diff = day === 0 ? -6 : 1 - day;
+
+      monday.setDate(today.getDate() + diff);
+
+
+      // 今週の日曜日を取得
+
+      const sunday = new Date(monday);
+
+      sunday.setDate(monday.getDate() + 6);
+
+
+      // 日付を整形
+
+      const formatDate = date => {
+
+        return date.toLocaleDateString("ja-JP", {
+
+          month: "long",
+          day: "numeric",
+          weekday: "short"
+
+        });
+
+      };
+
+
+      // 画面に表示
+
+      document.getElementById("weekRange").textContent =
+        formatDate(monday) +
+        " 〜 " +
+        formatDate(sunday);
+
+    }
+
+
+
+    // ===================================
+    // ⑫ 登録ボタン・Enterキーの処理
     // ===================================
 
     document.getElementById("taskForm")
@@ -772,10 +1172,12 @@ const archivedTasks = tasks.filter(task => {
 
 
     // ===================================
-    // ⑩ 初期表示
+    // ⑬ 初期表示
     // ===================================
 
     renderTasks();
+
+    showWeekRange();
 
 
   </script>
