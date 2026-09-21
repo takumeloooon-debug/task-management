@@ -33,6 +33,8 @@
       padding: 20px;
     }
 
+    [hidden] { display: none !important; }
+
     .container {
       max-width: 700px;
       margin: 40px auto;
@@ -409,7 +411,7 @@
 
 <body>
 
-  <div class="container">
+  <div class="container" id="appContainer" hidden>
 
 
     <!-- ===================================
@@ -649,28 +651,26 @@ const supabaseClient = supabase.createClient(
 // ② ログイン状態の確認
 // =====================================
 
+let currentUser = null;
+let tasks = [];
+let expData = { totalExp: 0, dailyRecords: {} };
+
 async function checkLogin() {
-
-  const { data, error } =
-    await supabaseClient.auth.getUser();
-
+  const { data, error } = await supabaseClient.auth.getUser();
   if (error || !data.user) {
-
-    // 未ログインならログイン画面へ移動
-
-    window.location.replace("./login.html");
-
+    window.location.replace('./login.html');
     return;
-
   }
-
-  console.log("ログイン中のユーザー:", data.user.email);
-
+  currentUser = data.user;
+  try {
+    await loadTasks();
+    document.getElementById('appContainer').hidden = false;
+    showWeekRange();
+  } catch (e) {
+    console.error('タスク取得エラー:', e);
+    alert('タスクの取得に失敗しました。tasksのカラムとRLSを確認してください。\n' + e.message);
+  }
 }
-
-
-// ページを開いたときに実行
-
 checkLogin();
 
 
@@ -705,94 +705,56 @@ logoutButton.addEventListener(
   }
 );
 
-    // ===================================
-    // ① データの読み込み
-    // ===================================
+// Supabaseの行を画面表示用のタスクに変換
+function fromRow(row) {
+  return {
+    id: row.id, text: row.title, taskType: row.task_type,
+    archived: row.status === 'completed',
+    createdAt: row.created_at, archivedAt: row.completed_at,
+    points: row.points || 0
+  };
+}
 
-    let tasks = [];
+async function loadTasks() {
+  const { data, error } = await supabaseClient.from('tasks')
+    .select('id,user_id,title,task_type,status,created_at,completed_at,points')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  tasks = data.map(fromRow);
+  refreshExp();
+  renderTasks();
+  renderCharacter();
+}
 
-    try {
+// 完了済みタスクの獲得ポイントから経験値を復元する
+function refreshExp() {
+  expData.totalExp = tasks.reduce((sum, task) => sum + (task.points || 0), 0);
+}
 
-      const savedTasks = JSON.parse(
-        localStorage.getItem("tasks") || "[]"
-      );
+// 同日の完了順に応じて経験値を決める（1件目100、2・3件目5、以降0）
+function calculateTaskPoints() {
+  const today = new Date().toLocaleDateString('sv-SE');
+  const count = tasks.filter(task => task.archivedAt &&
+    new Date(task.archivedAt).toLocaleDateString('sv-SE') === today).length;
+  return count === 0 ? 100 : count < 3 ? 5 : 0;
+}
 
-      tasks = Array.isArray(savedTasks)
-        ? savedTasks
-        : [];
+async function updateTaskRow(id, changes) {
+  const { error } = await supabaseClient.from('tasks').update(changes)
+    .eq('id', id).eq('user_id', currentUser.id);
+  if (error) throw error;
+  await loadTasks();
+}
 
-    } catch (error) {
-
-      console.error(
-        "タスクの読み込みに失敗しました",
-        error
-      );
-
-    }
-
+function showDbError(error) {
+  console.error(error);
+  alert('保存に失敗しました。Supabaseの設定を確認してください。\n' + error.message);
+}
 
 
-    // ===================================
-    // ② データ保存
-    // ===================================
 
-    function saveTasks() {
-
-      localStorage.setItem(
-        "tasks",
-        JSON.stringify(tasks)
-      );
-
-    }
-
-    // ===================================
-// 経験値データの読み込み
 // ===================================
-
-const EXP_STORAGE_KEY = "taskAppExp";
-
-let expData = {
-  totalExp: 0,
-  dailyRecords: {}
-};
-
-
-// 保存済みの経験値データを読み込む
-
-try {
-
-  const savedExp = JSON.parse(
-    localStorage.getItem(EXP_STORAGE_KEY) || "null"
-  );
-
-  if (savedExp) {
-
-    expData = savedExp;
-
-  }
-
-} catch (error) {
-
-  console.error(
-    "経験値データの読み込みに失敗しました",
-    error
-  );
-
-}
-
-
-// 経験値データを保存する
-
-function saveExpData() {
-
-  localStorage.setItem(
-    EXP_STORAGE_KEY,
-    JSON.stringify(expData)
-  );
-
-}
-
-    // ===================================
 // レベルアップに必要な累計経験値
 // ===================================
 
@@ -956,97 +918,10 @@ function getCharacter(level) {
 // 経験値獲得
 // ===================================
 
-function gainExp(taskId) {
-
-  const today = new Date().toLocaleDateString("sv-SE");
+// 経験値はtasks.pointsの合計から計算するため、別途保存しない。
 
 
-  // 今日の記録がなければ作成
-
-  if (!expData.dailyRecords[today]) {
-
-    expData.dailyRecords[today] = {
-
-      completedCount: 0,
-
-      earnedExp: 0,
-
-      rewardedTaskIds: []
-
-    };
-
-  }
-
-
-  const record = expData.dailyRecords[today];
-
-// 過去の日付も含め、同じタスクで経験値を獲得済みか確認する
-
-const alreadyRewarded = Object.values(
-  expData.dailyRecords
-).some(record => {
-
-  return (record.rewardedTaskIds || []).includes(taskId);
-
-});
-
-if (alreadyRewarded) {
-  return 0;
-}
-
-
-  // 今日の完了数を取得
-
-  const completedCount = record.completedCount;
-
-
-  // 獲得経験値を決定
-
-  let gainedExp = 0;
-
-
-  if (completedCount === 0) {
-
-    gainedExp = 100;
-
-  } else if (completedCount === 1) {
-
-    gainedExp = 5;
-
-  } else if (completedCount === 2) {
-
-    gainedExp = 5;
-
-  }
-
-
-  // 完了数を更新
-
-  record.completedCount += 1;
-
-
-  // 経験値を獲得したタスクを記録
-
-  record.rewardedTaskIds.push(taskId);
-
-
-  // 経験値を更新
-
-  record.earnedExp += gainedExp;
-
-  expData.totalExp += gainedExp;
-
-
-  // データを保存
-
-  saveExpData();
-
-
-  return gainedExp;
-
-}
-
-    // ===================================
+// ===================================
 // 育成画面を更新
 // ===================================
 
@@ -1143,302 +1018,71 @@ function renderCharacter() {
 
 
 
-    // ===================================
-    // ③ タスク登録
-    // ===================================
-
-    function addTask() {
-
-      const input = document.getElementById("taskInput");
-
-      const text = input.value.trim();
-
-
-      if (text === "") {
-        return;
-      }
-
-
-      // 今日やる・今週中にやるの選択を取得
-
-      const taskType = document.querySelector(
-        'input[name="taskType"]:checked'
-      ).value;
-
-
-      // 新しいタスクを作成
-
-      const newTask = {
-
-        id: crypto.randomUUID(),
-
-        text: text,
-
-        taskType: taskType,
-
-        archived: false,
-
-        createdAt: new Date().toISOString(),
-
-        archivedAt: null
-
-      };
-
-
-      // タスク一覧に追加
-
-      tasks.push(newTask);
-
-
-      // データ保存
-
-      saveTasks();
-
-
-      // 画面更新
-
-      renderTasks();
-
-
-      // 入力欄をリセット
-
-      input.value = "";
-
-      input.focus();
-
-    }
-
-
-
-    // ===================================
-    // ④ タスク編集
-    // ===================================
-
-    function editTask(id) {
-
-      const task = tasks.find(
-        task => task.id === id
-      );
-
-
-      if (!task) {
-        return;
-      }
-
-
-      const newText = prompt(
-        "タスクを編集してください",
-        task.text
-      );
-
-
-      if (newText === null) {
-        return;
-      }
-
-
-      const trimmedText = newText.trim();
-
-
-      if (trimmedText === "") {
-
-        alert("タスクを入力してください");
-
-        return;
-
-      }
-
-
-      if (trimmedText.length > 200) {
-
-        alert("タスクは200文字以内で入力してください");
-
-        return;
-
-      }
-
-
-      task.text = trimmedText;
-
-
-      saveTasks();
-
-      renderTasks();
-
-    }
-
-
-
-    // ===================================
-    // ⑤ タスク削除
-    // ===================================
-
-    function deleteTask(id) {
-
-      const confirmed = confirm(
-        "このタスクを削除しますか？"
-      );
-
-
-      if (!confirmed) {
-        return;
-      }
-
-
-      tasks = tasks.filter(
-        task => task.id !== id
-      );
-
-
-      saveTasks();
-
-      renderTasks();
-
-    }
-
-// ===================================
-// タスク完了
-// ===================================
-
-function archiveTask(id) {
-
-  const task = tasks.find(
-    task => task.id === id
-  );
-
-
-  if (!task) {
-    return;
-  }
-
-
-  // すでに完了している場合は処理しない
-
-  if (task.archived) {
-    return;
-  }
-
-
-  // 完了前のレベルを取得
-
-  const oldLevel = calculateLevel(
-    expData.totalExp
-  );
-
-
-  // タスクを完了状態にする
-
-  task.archived = true;
-
-  task.archivedAt = new Date().toISOString();
-
-
-  // タスクを保存
-
-  saveTasks();
-
-
-  // 経験値を獲得
-
-  const gainedExp = gainExp(id);
-
-
-  // 完了後のレベルを取得
-
-  const newLevel = calculateLevel(
-    expData.totalExp
-  );
-
-
-  // タスク一覧を更新
-
-  renderTasks();
-
-
-  // キャラクター表示を更新
-
-  renderCharacter();
-
-
-  // ===================================
-  // レベルアップ通知
-  // ===================================
-
-  const message = document.getElementById(
-    "levelMessage"
-  );
-
-
-  if (newLevel > oldLevel) {
-
-    message.textContent =
-      "🎉 LEVEL UP！ Lv." + newLevel;
-
-  } else {
-
-    message.textContent =
-      "+" + gainedExp + " EXP 獲得！";
-
-  }
-
+// タスク登録・編集・削除・完了・復元・移動
+async function addTask() {
+  const input = document.getElementById('taskInput');
+  const title = input.value.trim();
+  if (!title || !currentUser) return;
+  const taskType = document.querySelector('input[name="taskType"]:checked').value;
+  try {
+    const { error } = await supabaseClient.from('tasks').insert({
+      user_id: currentUser.id, title, task_type: taskType,
+      status: 'active', points: 0
+    });
+    if (error) throw error;
+    input.value = '';
+    await loadTasks();
+    input.focus();
+  } catch (e) { showDbError(e); }
 }
 
-  
+async function editTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+  const title = prompt('タスクを編集してください', task.text);
+  if (title === null) return;
+  if (!title.trim() || title.trim().length > 200) {
+    alert('タスクは1〜200文字で入力してください'); return;
+  }
+  try { await updateTaskRow(id, { title: title.trim() }); }
+  catch (e) { showDbError(e); }
+}
 
+async function deleteTask(id) {
+  if (!confirm('このタスクを削除しますか？')) return;
+  try {
+    const { error } = await supabaseClient.from('tasks').delete()
+      .eq('id', id).eq('user_id', currentUser.id);
+    if (error) throw error;
+    await loadTasks();
+  } catch (e) { showDbError(e); }
+}
 
-    // ===================================
-    // ⑦ アーカイブから戻す
-    // ===================================
+async function archiveTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (!task || task.archived) return;
+  const oldLevel = calculateLevel(expData.totalExp);
+  const points = task.archivedAt ? task.points : calculateTaskPoints();
+  try {
+    await updateTaskRow(id, {
+      status: 'completed', completed_at: new Date().toISOString(), points
+    });
+    const newLevel = calculateLevel(expData.totalExp);
+    document.getElementById('levelMessage').textContent = newLevel > oldLevel
+      ? '🎉 LEVEL UP！ Lv.' + newLevel : '+' + points + ' EXP 獲得！';
+  } catch (e) { showDbError(e); }
+}
 
-    function restoreTask(id) {
+async function restoreTask(id) {
+  // 完了日時と獲得ポイントを保持し、再完了時の二重付与を防ぐ
+  try { await updateTaskRow(id, { status: 'active' }); }
+  catch (e) { showDbError(e); }
+}
 
-      const task = tasks.find(
-        task => task.id === id
-      );
-
-
-      if (!task) {
-        return;
-      }
-
-
-      task.archived = false;
-
-      task.archivedAt = null;
-
-
-      saveTasks();
-
-      renderTasks();
-
-    }
-
-
-
-    // ===================================
-    // ⑧ タスクの種類を変更
-    // ===================================
-
-    function moveTask(id, newType) {
-
-      const task = tasks.find(
-        task => task.id === id
-      );
-
-
-      if (!task) {
-        return;
-      }
-
-
-      task.taskType = newType;
-
-
-      saveTasks();
-
-      renderTasks();
-
-    }
+async function moveTask(id, newType) {
+  try { await updateTaskRow(id, { task_type: newType }); }
+  catch (e) { showDbError(e); }
+}
 
 
 
@@ -1880,11 +1524,7 @@ function archiveTask(id) {
     // ⑬ 初期表示
     // ===================================
 
-    renderTasks();
-
-    showWeekRange();
-
-    renderCharacter();
+    // 認証後にcheckLogin()から初期表示する
 
 
   </script>
