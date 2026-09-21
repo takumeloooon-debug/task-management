@@ -12,6 +12,8 @@
 
   <title>タスク管理アプリ</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <style>
 
@@ -385,6 +387,20 @@
   display: none;
 }
 
+    #logoutButton {
+  background: #eeeeee;
+  color: #777777;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#logoutButton:hover {
+  background: #dddddd;
+}
+
   </style>
 
 </head>
@@ -401,6 +417,11 @@
     =================================== -->
 
     <h1>タスク管理</h1>
+
+    <!-- ログアウトボタンを追加 -->
+  <button id="logoutButton">
+    ログアウト
+  </button>
 
     <p class="subtitle">
       今日やることを決めて、一つずつ進めよう。
@@ -608,9 +629,81 @@
 
   </div>
 
-
-
   <script>
+
+    // =====================================
+// ① Supabaseの設定
+// =====================================
+
+const SUPABASE_URL = "ここにSupabaseのProject URL";
+
+const SUPABASE_KEY = "ここにSupabaseのPublishable key";
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+// =====================================
+// ② ログイン状態の確認
+// =====================================
+
+async function checkLogin() {
+
+  const { data, error } =
+    await supabaseClient.auth.getUser();
+
+  if (error || !data.user) {
+
+    // 未ログインならログイン画面へ移動
+
+    window.location.replace("./login.html");
+
+    return;
+
+  }
+
+  console.log("ログイン中のユーザー:", data.user.email);
+
+}
+
+
+// ページを開いたときに実行
+
+checkLogin();
+
+
+// =====================================
+// ③ ログアウト処理
+// =====================================
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+logoutButton.addEventListener(
+  "click",
+  async function() {
+
+    const { error } =
+      await supabaseClient.auth.signOut();
+
+    if (error) {
+
+      alert("ログアウトに失敗しました");
+
+      console.error(error);
+
+      return;
+
+    }
+
+    // ログアウト成功後、ログイン画面へ移動
+
+    window.location.replace("./login.html");
+
+  }
+);
 
     // ===================================
     // ① データの読み込み
