@@ -685,6 +685,23 @@ logoutButton.addEventListener(
   "click",
   async function() {
 
+    console.log("ログアウトボタンが押された！");
+
+    const { error } =
+      await supabaseClient.auth.signOut();
+
+    if (error) {
+      alert("ログアウトに失敗しました：" + error.message);
+      console.error(error);
+      return;
+    }
+
+    // ログアウト成功後、ログイン画面へ移動
+    window.location.replace("./login.html");
+
+  }
+);
+    
     const { error } =
       await supabaseClient.auth.signOut();
 
