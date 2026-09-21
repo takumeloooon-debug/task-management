@@ -274,15 +274,7 @@
         throw error;
       }
 
-      // 今日より前に完了したタスクだけを表示
-      const today = getLocalDateString(new Date());
-
-      const archivedTasks = data.filter(task => {
-        const completedDate = getLocalDateString(task.completed_at);
-        return completedDate < today;
-      });
-
-      renderArchive(archivedTasks);
+      renderArchive(data);
 
     } catch (error) {
 
