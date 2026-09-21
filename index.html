@@ -681,46 +681,21 @@ checkLogin();
 const logoutButton =
   document.getElementById("logoutButton");
 
-logoutButton.addEventListener(
-  "click",
-  async function() {
+logoutButton.addEventListener("click", async function () {
 
-    console.log("ログアウトボタンが押された！");
+  console.log("ログアウトボタンが押された！");
 
-    const { error } =
-      await supabaseClient.auth.signOut();
+  const { error } = await supabaseClient.auth.signOut();
 
-    if (error) {
-      alert("ログアウトに失敗しました：" + error.message);
-      console.error(error);
-      return;
-    }
-
-    // ログアウト成功後、ログイン画面へ移動
-    window.location.replace("./login.html");
-
+  if (error) {
+    alert("ログアウトに失敗しました：" + error.message);
+    console.error(error);
+    return;
   }
-);
-    
-    const { error } =
-      await supabaseClient.auth.signOut();
 
-    if (error) {
+  window.location.replace("./login.html");
 
-      alert("ログアウトに失敗しました");
-
-      console.error(error);
-
-      return;
-
-    }
-
-    // ログアウト成功後、ログイン画面へ移動
-
-    window.location.replace("./login.html");
-
-  }
-);
+});
 
 // Supabaseの行を画面表示用のタスクに変換
 function fromRow(row) {
