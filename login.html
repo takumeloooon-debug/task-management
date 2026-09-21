@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ログイン | タスク管理アプリ</title>
+
+  <!-- Supabaseのライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f6f4ff;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 80px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a99be8;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 25px;
+      background: #a99be8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9180d8;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .error {
+      color: #d9534f;
+    }
+
+    .success {
+      color: #4caf50;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+    }
+
+    a {
+      color: #8874d0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="container">
+
+    <h1>ログイン</h1>
+
+    <p class="description">
+      今日も少しずつ、タスクを進めよう！
+    </p>
+
+
+    <!-- ログインフォーム -->
+
+    <form id="loginForm">
+
+      <label for="email">
+        メールアドレス
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="example@gmail.com"
+        autocomplete="email"
+        required
+      >
+
+
+      <label for="password">
+        パスワード
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="パスワードを入力"
+        autocomplete="current-password"
+        required
+      >
+
+
+      <button type="submit" id="loginButton">
+        ログイン
+      </button>
+
+    </form>
+
+
+    <!-- メッセージ表示 -->
+
+    <p id="message" class="message"></p>
+
+
+    <!-- 新規登録画面へのリンク -->
+
+    <div class="register-link">
+
+      アカウントをお持ちでない方は
+
+      <br><br>
+
+      <a href="register.html">
+        新規登録はこちら
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // =====================================
+    // ① Supabaseの設定
+    // =====================================
+
+    const SUPABASE_URL = "ここにSupabaseのProject URL";
+
+    const SUPABASE_KEY = "ここにSupabaseのPublishable key";
+
+
+    // Supabaseクライアントを作成
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // =====================================
+    // ② HTMLの要素を取得
+    // =====================================
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const message =
+      document.getElementById("message");
+
+
+    // =====================================
+    // ③ ログイン状態を確認
+    // =====================================
+
+    async function checkLogin() {
+
+      const { data, error } =
+        await supabaseClient.auth.getUser();
+
+      if (error) {
+        console.log("ログイン状態の確認:", error.message);
+        return;
+      }
+
+      // ログイン済みなら管理画面へ移動
+
+      if (data.user) {
+
+        window.location.href = "index.html";
+
+      }
+
+    }
+
+
+    // ページを開いたときに実行
+
+    checkLogin();
+
+
+    // =====================================
+    // ④ ログイン処理
+    // =====================================
+
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        // フォームの標準送信を停止
+
+        event.preventDefault();
+
+
+        // 入力された値を取得
+
+        const email = emailInput.value.trim();
+
+        const password = passwordInput.value;
+
+
+        // ボタンを一時的に無効化
+
+        loginButton.disabled = true;
+
+        loginButton.textContent = "ログイン中...";
+
+
+        // メッセージを初期化
+
+        message.textContent = "";
+
+        message.className = "message";
+
+
+        // =====================================
+        // ⑤ Supabaseでログイン
+        // =====================================
+
+        try {
+
+          const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          // ログイン失敗
+
+          if (error) {
+
+            message.textContent =
+              "ログインに失敗しました。メールアドレスとパスワードを確認してください。";
+
+            message.className = "message error";
+
+            console.error(error);
+
+            return;
+
+          }
+
+
+          // =====================================
+          // ⑥ ログイン成功
+          // =====================================
+
+          if (data.user) {
+
+            message.textContent =
+              "ログインに成功しました！";
+
+            message.className = "message success";
+
+
+            // 管理画面へ移動
+
+            window.location.href = "index.html";
+
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          message.textContent =
+            "通信エラーが発生しました。時間をおいて再度お試しください。";
+
+          message.className = "message error";
+
+        } finally {
+
+          // ボタンを元に戻す
+
+          loginButton.disabled = false;
+
+          loginButton.textContent = "ログイン";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
