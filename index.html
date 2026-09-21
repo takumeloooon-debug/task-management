@@ -1863,19 +1863,51 @@
 
 
         if (
-          newLevel >
-          oldLevel
-        ) {
+  newLevel >
+  oldLevel
+) {
 
-          showToast(
-            "🎉 LEVEL UP！ Lv." +
-            oldLevel +
-            " → Lv." +
-            newLevel,
-            true
-          );
+  // ===============================
+  // レベルアップ通知
+  // ===============================
 
-        }
+  showToast(
+    "🎉 LEVEL UP！ Lv." +
+    oldLevel +
+    " → Lv." +
+    newLevel,
+    true
+  );
+
+
+  // ===============================
+  // 進化チェック
+  // ===============================
+
+  const oldCharacter =
+    getCharacter(oldLevel);
+
+  const newCharacter =
+    getCharacter(newLevel);
+
+
+  // キャラクターが変わっていたら進化！
+
+  if (
+    oldCharacter.name !==
+    newCharacter.name
+  ) {
+
+    showToast(
+      "✨ 進化！「" +
+      newCharacter.name +
+      "」になった！",
+      true
+    );
+
+  }
+
+}
 
 
       } catch (e) {
