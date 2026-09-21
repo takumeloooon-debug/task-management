@@ -12,6 +12,8 @@
 
   <title>過去の記録</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <style>
 
@@ -206,246 +208,212 @@
 
   </div>
 
+<script>
+
+  // ===================================
+  // ① Supabaseの設定
+  // ===================================
+
+  // index.htmlと同じURL・Publishable keyを設定する
+  const SUPABASE_URL = "ここにindex.htmlと同じSupabase URL";
+  const SUPABASE_KEY = "ここにindex.htmlと同じPublishable key";
+
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-  <script>
+  // ===================================
+  // ② 日付を「YYYY-MM-DD」に変換
+  // ===================================
 
-    // ===================================
-    // ① データの読み込み
-    // ===================================
+  function getLocalDateString(date) {
+    return new Date(date).toLocaleDateString("sv-SE");
+  }
 
-    let tasks = [];
+
+  // ===================================
+  // ③ ログイン確認・タスク取得
+  // ===================================
+
+  async function loadArchive() {
+
+    const archiveList = document.getElementById("archiveList");
+
+    archiveList.innerHTML = `
+      <div class="card">
+        <p class="empty-message">読み込み中...</p>
+      </div>
+    `;
 
     try {
 
-      const savedTasks = JSON.parse(
-        localStorage.getItem("tasks") || "[]"
-      );
+      // ログイン中のユーザーを確認
+      const { data: authData, error: authError } =
+        await supabaseClient.auth.getUser();
 
-      tasks = Array.isArray(savedTasks)
-        ? savedTasks
-        : [];
+      if (authError || !authData.user) {
+        window.location.replace("./login.html");
+        return;
+      }
+
+      const currentUser = authData.user;
+
+      // Supabaseから完了済みタスクを取得
+      const { data, error } = await supabaseClient
+        .from("tasks")
+        .select("id,title,status,completed_at")
+        .eq("user_id", currentUser.id)
+        .eq("status", "completed")
+        .not("completed_at", "is", null)
+        .order("completed_at", { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      // 今日より前に完了したタスクだけを表示
+      const today = getLocalDateString(new Date());
+
+      const archivedTasks = data.filter(task => {
+        const completedDate = getLocalDateString(task.completed_at);
+        return completedDate < today;
+      });
+
+      renderArchive(archivedTasks);
 
     } catch (error) {
 
-      console.error(
-        "タスクの読み込みに失敗しました",
-        error
+      console.error("過去の記録の取得に失敗しました:", error);
+
+      archiveList.innerHTML = `
+        <div class="card">
+          <p class="empty-message">
+            過去の記録を取得できませんでした。
+          </p>
+        </div>
+      `;
+
+      alert(
+        "過去の記録の取得に失敗しました。\n" + error.message
       );
 
     }
 
-
-
-    // ===================================
-    // ② 今日の日付を取得
-    // ===================================
-
-    const today = new Date().toLocaleDateString("sv-SE");
-
-
-    // ===================================
-// ③ 完了済みのタスクをすべて取得
-// ===================================
-
-const archivedTasks = tasks.filter(task => {
-
-  // アーカイブされていなければ除外
-  if (!task.archived) {
-    return false;
   }
 
-  // 完了日時がなければ除外
-  if (!task.archivedAt) {
-    return false;
-  }
 
-  // 今日を含めたすべての完了済みタスクを取得
-  return true;
+  // ===================================
+  // ④ 日付ごとにタスクを表示
+  // ===================================
 
-});
+  function renderArchive(archivedTasks) {
 
+    const archiveList =
+      document.getElementById("archiveList");
 
-
-    // ===================================
-    // ④ 完了日の新しい順に並び替え
-    // ===================================
-
-    archivedTasks.sort((a, b) => {
-
-      return new Date(b.archivedAt)
-        - new Date(a.archivedAt);
-
-    });
+    archiveList.innerHTML = "";
 
 
+    // 過去の記録がない場合
+    if (archivedTasks.length === 0) {
 
-    // ===================================
-    // ⑤ 日付ごとにグループ化
-    // ===================================
+      archiveList.innerHTML = `
+        <div class="card">
+          <p class="empty-message">
+            過去の記録はまだありません
+          </p>
+        </div>
+      `;
 
+      return;
+    }
+
+
+    // 完了日ごとにグループ化
     const groupedTasks = {};
-
 
     archivedTasks.forEach(task => {
 
-      const date = new Date(
-        task.archivedAt
-      ).toLocaleDateString("sv-SE");
-
-
-      // 日付のグループがなければ作成
+      const date = getLocalDateString(task.completed_at);
 
       if (!groupedTasks[date]) {
-
         groupedTasks[date] = [];
-
       }
-
-
-      // 該当する日付のグループに追加
 
       groupedTasks[date].push(task);
 
     });
 
 
+    // 日付の新しい順に表示
+    Object.keys(groupedTasks)
+      .sort((a, b) => b.localeCompare(a))
+      .forEach(date => {
 
-    // ===================================
-    // ⑥ 過去のタスクを表示
-    // ===================================
-
-    function renderArchive() {
-
-      const archiveList = document.getElementById(
-        "archiveList"
-      );
-
-
-      archiveList.innerHTML = "";
-
-
-      // 過去の記録がない場合
-
-      if (archivedTasks.length === 0) {
-
-        archiveList.innerHTML = `
-          <div class="card">
-
-            <p class="empty-message">
-              過去の記録はまだありません
-            </p>
-
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-
-      // 日付ごとに表示
-
-      Object.keys(groupedTasks).forEach(date => {
-
-
-        // ===== 日付ごとのカード =====
-
+        // 日付ごとのカード
         const card = document.createElement("div");
-
         card.className = "card";
 
 
-
-        // ===== 日付タイトル =====
-
+        // 日付タイトル
         const dateTitle = document.createElement("h2");
-
         dateTitle.className = "date-title";
-
 
         const formattedDate = new Date(
           date + "T00:00:00"
         ).toLocaleDateString("ja-JP", {
-
           year: "numeric",
           month: "long",
           day: "numeric"
-
         });
 
-
         dateTitle.textContent = formattedDate;
-
-
         card.appendChild(dateTitle);
 
 
-
-        // ===== タスク一覧 =====
-
+        // その日に完了したタスクを表示
         groupedTasks[date].forEach(task => {
 
-
           const item = document.createElement("div");
-
           item.className = "task-item";
 
 
-
           // チェックアイコン
-
           const checkIcon = document.createElement("span");
-
           checkIcon.className = "check-icon";
-
           checkIcon.textContent = "✓";
 
 
-
-          // タスクの内容
-
+          // タスク名
           const text = document.createElement("div");
-
           text.className = "task-text";
-
-          text.textContent = task.text;
-
+          text.textContent = task.title;
 
 
-          // タスクを追加
-
-          item.append(
-            checkIcon,
-            text
-          );
-
-
+          item.append(checkIcon, text);
           card.appendChild(item);
 
         });
 
 
-
-        // ===== 画面に追加 =====
-
         archiveList.appendChild(card);
 
       });
 
-    }
+  }
 
 
+  // ===================================
+  // ⑤ 初期表示
+  // ===================================
 
-    // ===================================
-    // ⑦ 初期表示
-    // ===================================
+  loadArchive();
 
-    renderArchive();
+</script>
 
-
-  </script>
+  
 
 </body>
 
