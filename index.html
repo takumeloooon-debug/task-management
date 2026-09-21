@@ -403,6 +403,28 @@
   background: #dddddd;
 }
 
+    /* 操作結果を画面右下に表示する通知 */
+    #toastArea {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: min(360px, calc(100vw - 32px));
+      pointer-events: none;
+    }
+    .toast {
+      background: #40365b;
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.18);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .toast.level-up { background: #7354c5; }
   </style>
 
 </head>
@@ -631,6 +653,8 @@
 
   </div>
 
+  <div id="toastArea" role="status" aria-live="polite" aria-atomic="false"></div>
+
   <script>
 
     // =====================================
@@ -719,9 +743,21 @@ async function loadTasks() {
   renderCharacter();
 }
 
-// 完了済みタスクの獲得ポイントから経験値を復元する
+// 完了中のタスクだけを集計する。取り消し・削除後も再計算される。
 function refreshExp() {
-  expData.totalExp = tasks.reduce((sum, task) => sum + (task.points || 0), 0);
+  expData.totalExp = tasks
+    .filter(task => task.archived)
+    .reduce((sum, task) => sum + (task.points || 0), 0);
+}
+
+// 通知は画面上に一時表示する（DBには保存しない）。
+function showToast(message, levelUp = false) {
+  const area = document.getElementById('toastArea');
+  const toast = document.createElement('div');
+  toast.className = levelUp ? 'toast level-up' : 'toast';
+  toast.textContent = message;
+  area.appendChild(toast);
+  setTimeout(() => toast.remove(), 4500);
 }
 
 // 同日の完了順に応じて経験値を決める（1件目100、2・3件目5、以降0）
@@ -1042,11 +1078,20 @@ async function editTask(id) {
 
 async function deleteTask(id) {
   if (!confirm('このタスクを削除しますか？')) return;
+  const task = tasks.find(t => t.id === id);
+  const oldLevel = calculateLevel(expData.totalExp);
   try {
     const { error } = await supabaseClient.from('tasks').delete()
       .eq('id', id).eq('user_id', currentUser.id);
     if (error) throw error;
     await loadTasks();
+    if (task && task.archived) {
+      showToast('🗑️ 完了済みタスクを削除 −' + (task.points || 0) + ' EXP');
+      const newLevel = calculateLevel(expData.totalExp);
+      if (newLevel < oldLevel) {
+        showToast('レベル変更：Lv.' + oldLevel + ' → Lv.' + newLevel);
+      }
+    }
   } catch (e) { showDbError(e); }
 }
 
@@ -1054,21 +1099,36 @@ async function archiveTask(id) {
   const task = tasks.find(t => t.id === id);
   if (!task || task.archived) return;
   const oldLevel = calculateLevel(expData.totalExp);
-  const points = task.archivedAt ? task.points : calculateTaskPoints();
+  const points = calculateTaskPoints();
   try {
     await updateTaskRow(id, {
       status: 'completed', completed_at: new Date().toISOString(), points
     });
     const newLevel = calculateLevel(expData.totalExp);
-    document.getElementById('levelMessage').textContent = newLevel > oldLevel
-      ? '🎉 LEVEL UP！ Lv.' + newLevel : '+' + points + ' EXP 獲得！';
+    showToast('✅ タスク完了！ +' + points + ' EXP');
+    if (newLevel > oldLevel) {
+      showToast('🎉 LEVEL UP！ Lv.' + oldLevel + ' → Lv.' + newLevel, true);
+    }
   } catch (e) { showDbError(e); }
 }
 
 async function restoreTask(id) {
-  // 完了日時と獲得ポイントを保持し、再完了時の二重付与を防ぐ
-  try { await updateTaskRow(id, { status: 'active' }); }
-  catch (e) { showDbError(e); }
+  const task = tasks.find(t => t.id === id);
+  if (!task || !task.archived) return;
+  const oldLevel = calculateLevel(expData.totalExp);
+  const lostPoints = task.points || 0;
+  try {
+    // 完了を取り消したら、そのタスクのXPも取り消す。
+    // 再完了時には、その時点の「今日の完了件数」に基づき付与する。
+    await updateTaskRow(id, {
+      status: 'active', completed_at: null, points: 0
+    });
+    const newLevel = calculateLevel(expData.totalExp);
+    showToast('↩️ 完了を取り消しました −' + lostPoints + ' EXP');
+    if (newLevel < oldLevel) {
+      showToast('レベル変更：Lv.' + oldLevel + ' → Lv.' + newLevel);
+    }
+  } catch (e) { showDbError(e); }
 }
 
 async function moveTask(id, newType) {
