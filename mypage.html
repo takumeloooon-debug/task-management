@@ -343,26 +343,49 @@
 
         // 現在ログインしているユーザーを取得
 
-        const { data: authData, error: authError } =
-          await db.auth.getUser();
+        // ========================================
+// ログイン状態を確認
+// ========================================
+
+const { data: sessionData, error: sessionError } =
+  await db.auth.getSession();
 
 
-        // 認証エラーの場合
+// セッションが取得できなかった場合
+if (sessionError) {
+  throw sessionError;
+}
 
-        if (authError) {
-          throw authError;
-        }
+
+// ログインしていない場合
+if (!sessionData.session) {
+
+  window.location.href = "login.html";
+
+  return;
+
+}
 
 
-        // ログインしていない場合
+// ログイン中のユーザーを取得
+const { data: authData, error: authError } =
+  await db.auth.getUser();
 
-        if (!authData.user) {
 
-          window.location.href = "login.html";
+// 認証エラーの場合
+if (authError) {
+  throw authError;
+}
 
-          return;
 
-        }
+// ユーザー情報が取得できなかった場合
+if (!authData.user) {
+
+  window.location.href = "login.html";
+
+  return;
+
+}
 
 
         // ========================================
