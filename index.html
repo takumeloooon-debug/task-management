@@ -14,6 +14,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <link
+  href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+  rel="stylesheet"
+>
+
 
   <style>
 
@@ -32,12 +37,16 @@ html {
 body {
   margin: 0;
   padding: 32px 20px 60px;
+}
 
-  font-family:
-    "Hiragino Kaku Gothic ProN",
-    "Yu Gothic",
-    "Meiryo",
-    sans-serif;
+h1,
+h2,
+button,
+.character-name,
+.character-level,
+.mypage-link {
+  font-family: "DotGothic16", sans-serif;
+}
 
   color: #203354;
 
@@ -1062,7 +1071,7 @@ button:active {
 
     <div class="card">
 
-      <h2>新しいタスク</h2>
+      <h2>✏️新しいタスク</h2>
 
       <form id="taskForm">
 
@@ -1124,7 +1133,7 @@ button:active {
 
     <div class="card">
 
-      <h2>今日やるタスク</h2>
+      <h2>⚔️今日やるタスク</h2>
 
       <div id="taskList"></div>
 
@@ -1137,7 +1146,7 @@ button:active {
 
     <div class="card">
 
-      <h2>今週中にやるタスク</h2>
+      <h2>🗓️今週中にやるタスク</h2>
 
       <p
         id="weekRange"
@@ -1155,7 +1164,7 @@ button:active {
 
     <div class="card">
 
-      <h2>今日完了したタスク</h2>
+      <h2>🥇今日完了したタスク</h2>
 
       <div id="archiveList"></div>
 
