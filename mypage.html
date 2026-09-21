@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>マイページ | タスク管理アプリ</title>
+
+
+  <!-- Supabaseのライブラリ -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f6f4ff;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+
+    /* =====================
+       キャラクターエリア
+    ===================== */
+
+    .character-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .character {
+      font-size: 100px;
+      margin-bottom: 10px;
+    }
+
+    .username {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .level {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+
+    /* =====================
+       EXPバー
+    ===================== */
+
+    .exp-bar {
+      width: 100%;
+      height: 18px;
+      background: #e8e5f2;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .exp-progress {
+      width: 0%;
+      height: 100%;
+      background: #a99be8;
+      border-radius: 20px;
+      transition: width 0.3s;
+    }
+
+    .exp-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .next-level {
+      font-size: 13px;
+      color: #888;
+      margin-top: 5px;
+    }
+
+
+    /* =====================
+       記録
+    ===================== */
+
+    .stats-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .stats-card h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: #f6f4ff;
+      border-radius: 12px;
+      padding: 15px 5px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+
+    /* =====================
+       戻るボタン
+    ===================== */
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      margin-bottom: 30px;
+      color: #7766cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back:hover {
+      text-decoration: underline;
+    }
+
+
+    /* =====================
+       スマホ対応
+    ===================== */
+
+    @media (max-width: 500px) {
+
+      body {
+        padding: 15px;
+      }
+
+      .character {
+        font-size: 80px;
+      }
+
+      .stats {
+        gap: 6px;
+      }
+
+      .stat-number {
+        font-size: 18px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="container">
+
+    <h1>マイページ</h1>
+
+
+    <!-- =====================
+         キャラクター
+    ===================== -->
+
+    <div class="character-card">
+
+      <div class="character">
+        👾
+      </div>
+
+
+      <!-- Supabaseから取得したユーザー名 -->
+
+      <div class="username" id="username">
+        読み込み中...
+      </div>
+
+
+      <!-- レベル -->
+
+      <div class="level" id="level">
+        Lv.1
+      </div>
+
+
+      <!-- EXPバー -->
+
+      <div class="exp-bar">
+
+        <div class="exp-progress" id="expProgress"></div>
+
+      </div>
+
+
+      <div class="exp-text" id="expText">
+        0 / 100 EXP
+      </div>
+
+
+      <div class="next-level" id="nextLevel">
+        次のレベルまで 100 EXP
+      </div>
+
+    </div>
+
+
+    <!-- =====================
+         あなたの記録
+    ===================== -->
+
+    <div class="stats-card">
+
+      <h2>あなたの記録</h2>
+
+      <div class="stats">
+
+
+        <!-- 完了タスク -->
+
+        <div class="stat">
+
+          <div class="stat-number" id="completedTasks">
+            0
+          </div>
+
+          <div class="stat-label">
+            完了タスク
+          </div>
+
+        </div>
+
+
+        <!-- 累計EXP -->
+
+        <div class="stat">
+
+          <div class="stat-number" id="totalExp">
+            0
+          </div>
+
+          <div class="stat-label">
+            累計EXP
+          </div>
+
+        </div>
+
+
+        <!-- 現在レベル -->
+
+        <div class="stat">
+
+          <div class="stat-number" id="currentLevel">
+            1
+          </div>
+
+          <div class="stat-label">
+            現在レベル
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- index.htmlへ戻る -->
+
+    <a href="index.html" class="back">
+      ← タスク管理に戻る
+    </a>
+
+  </div>
+
+
+  <script>
+
+    // ========================================
+    // ① Supabaseの接続設定
+    // ========================================
+
+    const SUPABASE_URL =
+      "https://weftzcfogzqtskhklyft.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
+
+    const db = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // ========================================
+    // ② ログイン中のユーザーを取得
+    // ========================================
+
+    async function loadMyPage() {
+
+      try {
+
+        // 現在ログインしているユーザーを取得
+
+        const { data: authData, error: authError } =
+          await db.auth.getUser();
+
+
+        // 認証エラーの場合
+
+        if (authError) {
+          throw authError;
+        }
+
+
+        // ログインしていない場合
+
+        if (!authData.user) {
+
+          window.location.href = "login.html";
+
+          return;
+
+        }
+
+
+        // ========================================
+        // ③ ユーザーのUUIDを取得
+        // ========================================
+
+        const userId = authData.user.id;
+
+
+        // ========================================
+        // ④ profilesからユーザー名を取得
+        // ========================================
+
+        const { data: profile, error: profileError } =
+          await db
+            .from("profiles")
+            .select("username")
+            .eq("id", userId)
+            .single();
+
+
+        if (profileError) {
+          throw profileError;
+        }
+
+
+        // ========================================
+        // ⑤ HTMLにユーザー名を表示
+        // ========================================
+
+        document.getElementById("username").textContent =
+          profile.username;
+
+
+        // ========================================
+        // ⑥ レベル・EXPの表示
+        // ========================================
+
+        // 今回は仮のデータ
+        // 今後、Supabaseと連携する
+
+        const level = 1;
+
+        const exp = 0;
+
+        const requiredExp = 100;
+
+        const completedTasks = 0;
+
+
+        // レベル
+
+        document.getElementById("level").textContent =
+          "Lv." + level;
+
+
+        // EXPバー
+
+        const expPercentage =
+          (exp / requiredExp) * 100;
+
+        document.getElementById("expProgress").style.width =
+          expPercentage + "%";
+
+
+        // EXP表示
+
+        document.getElementById("expText").textContent =
+          exp + " / " + requiredExp + " EXP";
+
+
+        // 次のレベルまで
+
+        document.getElementById("nextLevel").textContent =
+          "次のレベルまで " +
+          (requiredExp - exp) +
+          " EXP";
+
+
+        // 完了タスク数
+
+        document.getElementById("completedTasks").textContent =
+          completedTasks;
+
+
+        // 累計EXP
+
+        document.getElementById("totalExp").textContent =
+          exp;
+
+
+        // 現在レベル
+
+        document.getElementById("currentLevel").textContent =
+          level;
+
+
+      } catch (error) {
+
+        console.error("マイページ読み込みエラー:", error);
+
+        document.getElementById("username").textContent =
+          "ユーザー情報を取得できませんでした";
+
+      }
+
+    }
+
+
+    // ========================================
+    // ⑦ ページを開いたら実行
+    // ========================================
+
+    loadMyPage();
+
+  </script>
+
+</body>
+
+</html>
