@@ -33,7 +33,9 @@
       padding: 20px;
     }
 
-    [hidden] { display: none !important; }
+    [hidden] {
+      display: none !important;
+    }
 
     .container {
       max-width: 700px;
@@ -298,148 +300,203 @@
 
     }
 
+
     /* ===================================
-   コンパクトなキャラクター表示
-=================================== */
-.character-card {
-  padding: 18px 22px;
-  text-align: left;
-}
-.character-summary {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.character-icon {
-  font-size: 42px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.character-details {
-  flex: 1;
-  min-width: 0;
-}
-.character-name {
-  font-size: 15px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-.character-level {
-  font-size: 17px;
-  font-weight: bold;
-  color: #7354c5;
-}
-.mypage-link {
-  display: inline-block;
-  padding: 8px 12px;
-  background: #eee9ff;
-  color: #7354c5;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: bold;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.mypage-link:hover {
-  background: #ddd3ff;
-}
-.character-card .exp-area { margin-top: 14px; }
-.character-card .exp-bar { height: 10px; }
-.character-card .total-exp {
-  margin-top: 10px;
-  margin-bottom: 0;
-  font-size: 11px;
-}
-.daily-progress {
-  margin-top: 10px;
-  margin-bottom: 0;
-  font-size: 11px;
-  color: #888;
-  line-height: 1.6;
-}
-@media (max-width: 600px) {
-  .character-card { padding: 16px; }
-  .character-summary { gap: 10px; }
-  .character-icon { font-size: 36px; }
-  .character-name { font-size: 14px; }
-  .character-level { font-size: 15px; }
-  .mypage-link { padding: 7px 9px; font-size: 11px; }
-}
+       コンパクトなキャラクター表示
+    =================================== */
 
-/* ===================================
-   経験値ゲージ
-=================================== */
+    .character-card {
+      padding: 18px 22px;
+      text-align: left;
+    }
 
-.exp-area {
-  margin-top: 20px;
-}
+    .character-summary {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
 
-.exp-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 8px;
-}
+    /*
+      絵文字ではなくPNG画像を表示する。
+      元画像が大きくてもCSS側で表示サイズを調整できる。
+    */
+    .character-icon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
 
-.exp-bar {
-  width: 100%;
-  height: 14px;
-  background: #eee9ff;
-  border-radius: 10px;
-  overflow: hidden;
-}
+    .character-details {
+      flex: 1;
+      min-width: 0;
+    }
 
-.exp-fill {
-  width: 0%;
-  height: 100%;
-  background: #a78bfa;
-  border-radius: 10px;
-  transition: width 0.5s ease;
-}
+    .character-name {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .character-level {
+      font-size: 17px;
+      font-weight: bold;
+      color: #7354c5;
+    }
+
+    .mypage-link {
+      display: inline-block;
+      padding: 8px 12px;
+      background: #eee9ff;
+      color: #7354c5;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .mypage-link:hover {
+      background: #ddd3ff;
+    }
+
+    .character-card .exp-area {
+      margin-top: 14px;
+    }
+
+    .character-card .exp-bar {
+      height: 10px;
+    }
+
+    .character-card .total-exp {
+      margin-top: 10px;
+      margin-bottom: 0;
+      font-size: 11px;
+    }
+
+    .daily-progress {
+      margin-top: 10px;
+      margin-bottom: 0;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+
+      .character-card {
+        padding: 16px;
+      }
+
+      .character-summary {
+        gap: 10px;
+      }
+
+      .character-icon {
+        width: 70px;
+        height: 70px;
+      }
+
+      .character-name {
+        font-size: 14px;
+      }
+
+      .character-level {
+        font-size: 15px;
+      }
+
+      .mypage-link {
+        padding: 7px 9px;
+        font-size: 11px;
+      }
+
+    }
 
 
-/* ===================================
-   累計経験値
-=================================== */
+    /* ===================================
+       経験値ゲージ
+    =================================== */
 
-.total-exp {
-  font-size: 12px;
-  color: #888;
-  margin-top: 12px;
-}
+    .exp-area {
+      margin-top: 20px;
+    }
+
+    .exp-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .exp-bar {
+      width: 100%;
+      height: 14px;
+      background: #eee9ff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .exp-fill {
+      width: 0%;
+      height: 100%;
+      background: #a78bfa;
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
 
 
-/* ===================================
-   レベルアップ通知
-=================================== */
+    /* ===================================
+       累計経験値
+    =================================== */
 
-.level-message {
-  font-size: 15px;
-  font-weight: bold;
-  color: #7354c5;
-  margin-top: 15px;
-}
+    .total-exp {
+      font-size: 12px;
+      color: #888;
+      margin-top: 12px;
+    }
 
-.level-message:empty {
-  display: none;
-}
+
+    /* ===================================
+       レベルアップ通知
+    =================================== */
+
+    .level-message {
+      font-size: 15px;
+      font-weight: bold;
+      color: #7354c5;
+      margin-top: 15px;
+    }
+
+    .level-message:empty {
+      display: none;
+    }
+
+
+    /* ===================================
+       ログアウト
+    =================================== */
 
     #logoutButton {
-  background: #eeeeee;
-  color: #777777;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
+      background: #eeeeee;
+      color: #777777;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
 
-#logoutButton:hover {
-  background: #dddddd;
-}
+    #logoutButton:hover {
+      background: #dddddd;
+    }
 
-    /* 操作結果を画面右下に表示する通知 */
+
+    /* ===================================
+       トースト通知
+    =================================== */
+
     #toastArea {
       position: fixed;
       right: 16px;
@@ -451,6 +508,7 @@
       max-width: min(360px, calc(100vw - 32px));
       pointer-events: none;
     }
+
     .toast {
       background: #40365b;
       color: #fff;
@@ -460,11 +518,14 @@
       font-size: 14px;
       line-height: 1.5;
     }
-    .toast.level-up { background: #7354c5; }
+
+    .toast.level-up {
+      background: #7354c5;
+    }
+
   </style>
 
 </head>
-
 
 
 <body>
@@ -478,45 +539,101 @@
 
     <h1>タスク管理</h1>
 
-    <!-- ログアウトボタンを追加 -->
-  <button id="logoutButton">
-    ログアウト
-  </button>
+    <button id="logoutButton">
+      ログアウト
+    </button>
 
     <p class="subtitle">
       今日やることを決めて、一つずつ進めよう。
     </p>
 
+
     <!-- ===================================
-     コンパクトなキャラクター表示
-=================================== -->
-<div class="card character-card">
-  <div class="character-summary">
-    <div id="characterIcon" class="character-icon">💧</div>
-    <div class="character-details">
-      <div id="characterName" class="character-name">スライム</div>
-      <div id="characterLevel" class="character-level">Lv.1</div>
-    </div>
-    <a href="mypage.html" class="mypage-link">マイページ →</a>
-  </div>
+         キャラクター表示
+    =================================== -->
 
-  <div class="exp-area">
-    <div class="exp-info">
-      <span>EXP</span>
-      <span id="expText">0 / 20</span>
-    </div>
-    <div class="exp-bar">
-      <div id="expFill" class="exp-fill"></div>
-    </div>
-  </div>
+    <div class="card character-card">
 
-  <p id="totalExp" class="total-exp">累計経験値：0 EXP</p>
-  <p class="daily-progress">
-    🎁 1日5件達成でボーナス10 EXP！<br>
-    <span id="dailyProgress">現在 0 / 5 タスク</span>
-  </p>
-  <p id="levelMessage" class="level-message"></p>
-</div>
+      <div class="character-summary">
+
+        <img
+          id="characterIcon"
+          class="character-icon"
+          src="mijuku-slime.png"
+          alt="未熟なスライム"
+        >
+
+        <div class="character-details">
+
+          <div
+            id="characterName"
+            class="character-name"
+          >
+            未熟なスライム
+          </div>
+
+          <div
+            id="characterLevel"
+            class="character-level"
+          >
+            Lv.1
+          </div>
+
+        </div>
+
+        <a
+          href="mypage.html"
+          class="mypage-link"
+        >
+          マイページ →
+        </a>
+
+      </div>
+
+
+      <div class="exp-area">
+
+        <div class="exp-info">
+          <span>EXP</span>
+          <span id="expText">0 / 20</span>
+        </div>
+
+        <div class="exp-bar">
+          <div
+            id="expFill"
+            class="exp-fill"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <p
+        id="totalExp"
+        class="total-exp"
+      >
+        累計経験値：0 EXP
+      </p>
+
+
+      <p class="daily-progress">
+
+        🎁 1日5件達成でボーナス10 EXP！<br>
+
+        <span id="dailyProgress">
+          現在 0 / 5 タスク
+        </span>
+
+      </p>
+
+
+      <p
+        id="levelMessage"
+        class="level-message"
+      ></p>
+
+    </div>
+
 
     <!-- ===================================
          タスク登録
@@ -528,9 +645,6 @@
 
       <form id="taskForm">
 
-
-        <!-- タスク入力 -->
-
         <input
           type="text"
           id="taskInput"
@@ -539,8 +653,6 @@
           required
         >
 
-
-        <!-- タスクの種類を選択 -->
 
         <div class="task-type">
 
@@ -573,21 +685,16 @@
         </div>
 
 
-        <!-- 追加ボタン -->
-
         <button
           type="submit"
           class="add-btn"
         >
-
           追加
-
         </button>
 
       </form>
 
     </div>
-
 
 
     <!-- ===================================
@@ -601,7 +708,6 @@
       <div id="taskList"></div>
 
     </div>
-
 
 
     <!-- ===================================
@@ -622,7 +728,6 @@
     </div>
 
 
-
     <!-- ===================================
          今日完了したタスク
     =================================== -->
@@ -636,9 +741,8 @@
     </div>
 
 
-
     <!-- ===================================
-         過去の記録へのリンク
+         過去の記録
     =================================== -->
 
     <div class="archive-link">
@@ -649,469 +753,1282 @@
 
     </div>
 
-
   </div>
 
-  <div id="toastArea" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <div
+    id="toastArea"
+    role="status"
+    aria-live="polite"
+    aria-atomic="false"
+  ></div>
+
 
   <script>
 
     // =====================================
-// ① Supabaseの設定
-// =====================================
+    // ① Supabaseの設定
+    // =====================================
 
-const SUPABASE_URL = "https://weftzcfogzqtskhklyft.supabase.co";
+    const SUPABASE_URL =
+      "https://weftzcfogzqtskhklyft.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
+    const SUPABASE_KEY =
+      "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-// =====================================
-// ② ログイン状態の確認
-// =====================================
-
-let currentUser = null;
-let tasks = [];
-let expData = { totalExp: 0, dailyRecords: {} };
-
-async function checkLogin() {
-  const { data, error } = await supabaseClient.auth.getUser();
-  if (error || !data.user) {
-    window.location.replace('./login.html');
-    return;
-  }
-  currentUser = data.user;
-  try {
-    await loadTasks();
-    document.getElementById('appContainer').hidden = false;
-    showWeekRange();
-  } catch (e) {
-    console.error('タスク取得エラー:', e);
-    alert('タスクの取得に失敗しました。tasksのカラムとRLSを確認してください。\n' + e.message);
-  }
-}
-checkLogin();
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
-// =====================================
-// ③ ログアウト処理
-// =====================================
+    // =====================================
+    // ② ログイン状態
+    // =====================================
 
-const logoutButton =
-  document.getElementById("logoutButton");
+    let currentUser = null;
 
-logoutButton.addEventListener("click", async function () {
+    let tasks = [];
 
-  console.log("ログアウトボタンが押された！");
-
-  const { error } = await supabaseClient.auth.signOut();
-
-  if (error) {
-    alert("ログアウトに失敗しました：" + error.message);
-    console.error(error);
-    return;
-  }
-
-  window.location.replace("./login.html");
-
-});
-
-// Supabaseの行を画面表示用のタスクに変換
-function fromRow(row) {
-  return {
-    id: row.id, text: row.title, taskType: row.task_type,
-    archived: row.status === 'completed',
-    createdAt: row.created_at, archivedAt: row.completed_at,
-    points: row.points || 0
-  };
-}
-
-async function loadTasks() {
-  const { data, error } = await supabaseClient.from('tasks')
-    .select('id,user_id,title,task_type,status,created_at,completed_at,points')
-    .eq('user_id', currentUser.id)
-    .order('created_at', { ascending: true });
-  if (error) throw error;
-  tasks = data.map(fromRow);
-  refreshExp();
-  renderTasks();
-  renderCharacter();
-}
-
-// 完了済みのタスク1件につき10EXP。同じ日の完了が5件以上なら10EXPを1回加算。
-// DBのpointsに残る旧ルールの数値は集計に使わず、既存の完了記録も新ルールで換算する。
-const TASK_EXP = 10;
-const DAILY_BONUS_EXP = 10;
-const DAILY_GOAL = 5;
-const dateKey = value => new Date(value).toLocaleDateString('sv-SE');
-
-function getExpBreakdown() {
-  const completed = tasks.filter(task => task.archived && task.archivedAt);
-  const counts = {};
-  for (const task of completed) {
-    const day = dateKey(task.archivedAt);
-    counts[day] = (counts[day] || 0) + 1;
-  }
-  const bonusDays = Object.values(counts).filter(count => count >= DAILY_GOAL).length;
-  return { total: completed.length * TASK_EXP + bonusDays * DAILY_BONUS_EXP, counts };
-}
-
-function refreshExp() {
-  const { total, counts } = getExpBreakdown();
-  expData.totalExp = total;
-  const todayCount = counts[dateKey(new Date())] || 0;
-  document.getElementById('dailyProgress').textContent =
-    '今日の達成：' + todayCount + ' / 5 タスク' +
-    (todayCount >= DAILY_GOAL ? ' 🎉 目標達成！' : '（あと' + (DAILY_GOAL - todayCount) + '件）');
-}
-
-// 通知は画面上に一時表示する（DBには保存しない）。
-function showToast(message, levelUp = false) {
-  const area = document.getElementById('toastArea');
-  const toast = document.createElement('div');
-  toast.className = levelUp ? 'toast level-up' : 'toast';
-  toast.textContent = message;
-  area.appendChild(toast);
-  setTimeout(() => toast.remove(), 4500);
-}
-
-async function updateTaskRow(id, changes) {
-  const { error } = await supabaseClient.from('tasks').update(changes)
-    .eq('id', id).eq('user_id', currentUser.id);
-  if (error) throw error;
-  await loadTasks();
-}
-
-function showDbError(error) {
-  console.error(error);
-  alert('保存に失敗しました。Supabaseの設定を確認してください。\n' + error.message);
-}
+    let expData = {
+      totalExp: 0,
+      dailyRecords: {}
+    };
 
 
+    async function checkLogin() {
 
-// ===================================
-// レベルアップに必要な累計経験値
-// ===================================
-
-// 5タスク/日＝60EXPとして、初日Lv.2、7日Lv.5、30日Lv.15、
-// 90日Lv.30、180日Lv.50に達する目安。節目の間は均等に配分する。
-const levelMilestones = [
-  [1, 0], [2, 20], [5, 420], [15, 1800], [30, 5400], [50, 10800]
-];
-const levelTable = Array.from({ length: 50 }, (_, index) => {
-  const level = index + 1;
-  const upperIndex = levelMilestones.findIndex(([milestone]) => milestone >= level);
-  const [endLevel, endExp] = levelMilestones[upperIndex];
-  if (level === endLevel) return endExp;
-  const [startLevel, startExp] = levelMilestones[upperIndex - 1];
-  const ratio = (level - startLevel) / (endLevel - startLevel);
-  return Math.round((startExp + (endExp - startExp) * ratio) / 10) * 10;
-});
-
-    // ===================================
-// 現在のレベルを計算
-// ===================================
-
-function calculateLevel(totalExp) {
-
-  let level = 1;
+      const { data, error } =
+        await supabaseClient.auth.getUser();
 
 
-  for (let i = 0; i < levelTable.length; i++) {
+      if (error || !data.user) {
 
-    if (totalExp >= levelTable[i]) {
+        window.location.replace(
+          "./login.html"
+        );
 
-      level = i + 1;
+        return;
 
-    } else {
+      }
 
-      break;
+
+      currentUser = data.user;
+
+
+      try {
+
+        await loadTasks();
+
+        document.getElementById(
+          "appContainer"
+        ).hidden = false;
+
+        showWeekRange();
+
+      } catch (e) {
+
+        console.error(
+          "タスク取得エラー:",
+          e
+        );
+
+        alert(
+          "タスクの取得に失敗しました。tasksのカラムとRLSを確認してください。\n" +
+          e.message
+        );
+
+      }
 
     }
 
-  }
 
+    checkLogin();
 
-  return level;
 
-}
+    // =====================================
+    // ③ ログアウト
+    // =====================================
 
-    // ===================================
-// キャラクターの進化段階
-// ===================================
+    const logoutButton =
+      document.getElementById(
+        "logoutButton"
+      );
 
-function getCharacter(level) {
 
-  if (level >= 50) {
+    logoutButton.addEventListener(
+      "click",
+      async function () {
 
-    return {
-      name: "伝説のドラゴン",
-      icon: "🐲"
-    };
+        const { error } =
+          await supabaseClient.auth.signOut();
 
-  }
 
+        if (error) {
 
-  if (level >= 43) {
+          alert(
+            "ログアウトに失敗しました：" +
+            error.message
+          );
 
-    return {
-      name: "ドラゴン",
-      icon: "🐉"
-    };
+          console.error(error);
 
-  }
+          return;
 
+        }
 
-  if (level >= 30) {
 
-    return {
-      name: "ドラゴンの幼体",
-      icon: "🥚"
-    };
+        window.location.replace(
+          "./login.html"
+        );
 
-  }
+      }
+    );
 
 
-  if (level >= 15) {
+    // =====================================
+    // Supabase → 画面用データ
+    // =====================================
 
-    return {
-      name: "スライムキング",
-      icon: "👑"
-    };
+    function fromRow(row) {
 
-  }
+      return {
 
+        id: row.id,
 
-  if (level >= 5) {
+        text: row.title,
 
-    return {
-      name: "成長したスライム",
-      icon: "💙"
-    };
+        taskType: row.task_type,
 
-  }
+        archived:
+          row.status === "completed",
 
+        createdAt:
+          row.created_at,
 
-  return {
-    name: "スライム",
-    icon: "💧"
-  };
+        archivedAt:
+          row.completed_at,
 
-}
+        points:
+          row.points || 0
 
-    // ===================================
-// 経験値獲得
-// ===================================
+      };
 
-// 経験値はtasks.pointsの合計から計算するため、別途保存しない。
-
-
-// ===================================
-// 育成画面を更新
-// ===================================
-
-function renderCharacter() {
-
-  const totalExp = expData.totalExp;
-
-
-  // 現在のレベル
-
-  const level = calculateLevel(totalExp);
-
-
-  // キャラクターの情報
-
-  const character = getCharacter(level);
-
-
-  // キャラクター表示
-
-  document.getElementById("characterIcon").textContent =
-    character.icon;
-
-
-  document.getElementById("characterName").textContent =
-    character.name;
-
-
-  document.getElementById("characterLevel").textContent =
-    "Lv." + level;
-
-
-
-  // ===================================
-  // 経験値ゲージ
-  // ===================================
-
-  const currentLevelExp = levelTable[level - 1];
-
-
-  // 最大レベルの場合
-
-  if (level === 50) {
-
-    document.getElementById("expText").textContent =
-      "MAX LEVEL";
-
-
-    document.getElementById("expFill").style.width =
-      "100%";
-
-  } else {
-
-    // 次のレベルに必要な累計経験値
-
-    const nextLevelExp = levelTable[level];
-
-
-    // 現在のレベル内で獲得した経験値
-
-    const currentExp = totalExp - currentLevelExp;
-
-
-    // 次のレベルまでに必要な経験値
-
-    const requiredExp = nextLevelExp - currentLevelExp;
-
-
-    // 経験値ゲージの割合
-
-    const expPercent =
-      (currentExp / requiredExp) * 100;
-
-
-    // 画面に反映
-
-    document.getElementById("expText").textContent =
-      currentExp + " / " + requiredExp;
-
-
-    document.getElementById("expFill").style.width =
-      expPercent + "%";
-
-  }
-
-
-
-  // 累計経験値
-
-  document.getElementById("totalExp").textContent =
-    "累計経験値：" + totalExp + " EXP";
-
-}
-
-
-
-// タスク登録・編集・削除・完了・復元・移動
-async function addTask() {
-  const input = document.getElementById('taskInput');
-  const title = input.value.trim();
-  if (!title || !currentUser) return;
-  const taskType = document.querySelector('input[name="taskType"]:checked').value;
-  try {
-    const { error } = await supabaseClient.from('tasks').insert({
-      user_id: currentUser.id, title, task_type: taskType,
-      status: 'active', points: 0
-    });
-    if (error) throw error;
-    input.value = '';
-    await loadTasks();
-    input.focus();
-  } catch (e) { showDbError(e); }
-}
-
-async function editTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (!task) return;
-  const title = prompt('タスクを編集してください', task.text);
-  if (title === null) return;
-  if (!title.trim() || title.trim().length > 200) {
-    alert('タスクは1〜200文字で入力してください'); return;
-  }
-  try { await updateTaskRow(id, { title: title.trim() }); }
-  catch (e) { showDbError(e); }
-}
-
-async function deleteTask(id) {
-  if (!confirm('このタスクを削除しますか？')) return;
-  const task = tasks.find(t => t.id === id);
-  const oldExp = expData.totalExp;
-  const oldLevel = calculateLevel(oldExp);
-  try {
-    const { error } = await supabaseClient.from('tasks').delete()
-      .eq('id', id).eq('user_id', currentUser.id);
-    if (error) throw error;
-    await loadTasks();
-    if (task && task.archived) {
-      showToast('🗑️ 完了済みタスクを削除 −' + (oldExp - expData.totalExp) + ' EXP');
-      const newLevel = calculateLevel(expData.totalExp);
-      if (newLevel < oldLevel) showToast('レベル変更：Lv.' + oldLevel + ' → Lv.' + newLevel);
     }
-  } catch (e) { showDbError(e); }
-}
 
-async function archiveTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (!task || task.archived) return;
-  const oldExp = expData.totalExp;
-  const oldLevel = calculateLevel(oldExp);
-  const beforeToday = getExpBreakdown().counts[dateKey(new Date())] || 0;
-  try {
-    await updateTaskRow(id, {
-      status: 'completed', completed_at: new Date().toISOString(), points: TASK_EXP
-    });
-    const gained = expData.totalExp - oldExp;
-    showToast('✅ タスク完了！ +' + gained + ' EXP');
-    const afterToday = getExpBreakdown().counts[dateKey(new Date())] || 0;
-    if (beforeToday < DAILY_GOAL && afterToday >= DAILY_GOAL) {
-      showToast('🎯 今日の5タスク達成！ ボーナス +' + DAILY_BONUS_EXP + ' EXP');
+
+    // =====================================
+    // タスク読み込み
+    // =====================================
+
+    async function loadTasks() {
+
+      const { data, error } =
+        await supabaseClient
+          .from("tasks")
+          .select(
+            "id,user_id,title,task_type,status,created_at,completed_at,points"
+          )
+          .eq(
+            "user_id",
+            currentUser.id
+          )
+          .order(
+            "created_at",
+            { ascending: true }
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      tasks = data.map(fromRow);
+
+
+      refreshExp();
+
+      renderTasks();
+
+      renderCharacter();
+
     }
-    const newLevel = calculateLevel(expData.totalExp);
-    if (newLevel > oldLevel) showToast('🎉 LEVEL UP！ Lv.' + oldLevel + ' → Lv.' + newLevel, true);
-  } catch (e) { showDbError(e); }
-}
-
-async function restoreTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (!task || !task.archived) return;
-  const oldExp = expData.totalExp;
-  const oldLevel = calculateLevel(oldExp);
-  try {
-    await updateTaskRow(id, {
-      status: 'active', completed_at: null, points: 0
-    });
-    showToast('↩️ 完了を取り消しました −' + (oldExp - expData.totalExp) + ' EXP');
-    const newLevel = calculateLevel(expData.totalExp);
-    if (newLevel < oldLevel) showToast('レベル変更：Lv.' + oldLevel + ' → Lv.' + newLevel);
-  } catch (e) { showDbError(e); }
-}
-
-async function moveTask(id, newType) {
-  try { await updateTaskRow(id, { task_type: newType }); }
-  catch (e) { showDbError(e); }
-}
 
 
+    // =====================================
+    // EXP設定
+    // =====================================
 
-    // ===================================
-    // ⑨ タスク一覧を表示
-    // ===================================
+    const TASK_EXP = 10;
+
+    const DAILY_BONUS_EXP = 10;
+
+    const DAILY_GOAL = 5;
+
+
+    const dateKey = value =>
+      new Date(value)
+        .toLocaleDateString("sv-SE");
+
+
+    function getExpBreakdown() {
+
+      const completed =
+        tasks.filter(
+          task =>
+            task.archived &&
+            task.archivedAt
+        );
+
+
+      const counts = {};
+
+
+      for (const task of completed) {
+
+        const day =
+          dateKey(task.archivedAt);
+
+        counts[day] =
+          (counts[day] || 0) + 1;
+
+      }
+
+
+      const bonusDays =
+        Object.values(counts)
+          .filter(
+            count =>
+              count >= DAILY_GOAL
+          )
+          .length;
+
+
+      return {
+
+        total:
+          completed.length * TASK_EXP +
+          bonusDays * DAILY_BONUS_EXP,
+
+        counts
+
+      };
+
+    }
+
+
+    function refreshExp() {
+
+      const { total, counts } =
+        getExpBreakdown();
+
+
+      expData.totalExp = total;
+
+
+      const todayCount =
+        counts[
+          dateKey(new Date())
+        ] || 0;
+
+
+      document.getElementById(
+        "dailyProgress"
+      ).textContent =
+
+        "今日の達成：" +
+        todayCount +
+        " / 5 タスク" +
+
+        (
+          todayCount >= DAILY_GOAL
+
+            ? " 🎉 目標達成！"
+
+            : "（あと" +
+              (DAILY_GOAL - todayCount) +
+              "件）"
+        );
+
+    }
+
+
+    // =====================================
+    // 通知
+    // =====================================
+
+    function showToast(
+      message,
+      levelUp = false
+    ) {
+
+      const area =
+        document.getElementById(
+          "toastArea"
+        );
+
+
+      const toast =
+        document.createElement(
+          "div"
+        );
+
+
+      toast.className =
+        levelUp
+          ? "toast level-up"
+          : "toast";
+
+
+      toast.textContent =
+        message;
+
+
+      area.appendChild(
+        toast
+      );
+
+
+      setTimeout(
+        () => toast.remove(),
+        4500
+      );
+
+    }
+
+
+    // =====================================
+    // タスク更新
+    // =====================================
+
+    async function updateTaskRow(
+      id,
+      changes
+    ) {
+
+      const { error } =
+        await supabaseClient
+          .from("tasks")
+          .update(changes)
+          .eq("id", id)
+          .eq(
+            "user_id",
+            currentUser.id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      await loadTasks();
+
+    }
+
+
+    function showDbError(error) {
+
+      console.error(error);
+
+      alert(
+        "保存に失敗しました。Supabaseの設定を確認してください。\n" +
+        error.message
+      );
+
+    }
+
+
+    // =====================================
+    // レベルアップに必要な累計経験値
+    // =====================================
+
+    const levelMilestones = [
+
+      [1, 0],
+
+      [2, 20],
+
+      [5, 420],
+
+      [15, 1800],
+
+      [30, 5400],
+
+      [50, 10800]
+
+    ];
+
+
+    const levelTable =
+      Array.from(
+        { length: 50 },
+        (_, index) => {
+
+          const level =
+            index + 1;
+
+
+          const upperIndex =
+            levelMilestones.findIndex(
+              ([milestone]) =>
+                milestone >= level
+            );
+
+
+          const [
+            endLevel,
+            endExp
+          ] =
+            levelMilestones[
+              upperIndex
+            ];
+
+
+          if (
+            level === endLevel
+          ) {
+
+            return endExp;
+
+          }
+
+
+          const [
+            startLevel,
+            startExp
+          ] =
+            levelMilestones[
+              upperIndex - 1
+            ];
+
+
+          const ratio =
+            (
+              level -
+              startLevel
+            ) /
+            (
+              endLevel -
+              startLevel
+            );
+
+
+          return Math.round(
+            (
+              startExp +
+              (
+                endExp -
+                startExp
+              ) *
+              ratio
+            ) / 10
+          ) * 10;
+
+        }
+      );
+
+
+    // =====================================
+    // 現在のレベル
+    // =====================================
+
+    function calculateLevel(
+      totalExp
+    ) {
+
+      let level = 1;
+
+
+      for (
+        let i = 0;
+        i < levelTable.length;
+        i++
+      ) {
+
+        if (
+          totalExp >=
+          levelTable[i]
+        ) {
+
+          level =
+            i + 1;
+
+        } else {
+
+          break;
+
+        }
+
+      }
+
+
+      return level;
+
+    }
+
+
+    // =====================================
+    // スライム進化段階
+    // =====================================
+    //
+    // Lv.1〜4
+    // 未熟なスライム
+    //
+    // Lv.5〜14
+    // ほどほどのスライム
+    //
+    // Lv.15〜29
+    // 大人スライム
+    //
+    // Lv.30〜39
+    // スライム伯爵
+    //
+    // Lv.40〜49
+    // キングスライム
+    //
+    // Lv.50
+    // ゴッドスライム
+    // =====================================
+
+    function getCharacter(level) {
+
+
+      if (level >= 50) {
+
+        return {
+
+          name:
+            "ゴッドスライム",
+
+          image:
+            "god-slime.png"
+
+        };
+
+      }
+
+
+      if (level >= 40) {
+
+        return {
+
+          name:
+            "キングスライム",
+
+          image:
+            "king-slime.png"
+
+        };
+
+      }
+
+
+      if (level >= 30) {
+
+        return {
+
+          name:
+            "スライム伯爵",
+
+          image:
+            "slime-hakushaku.png"
+
+        };
+
+      }
+
+
+      if (level >= 15) {
+
+        return {
+
+          name:
+            "大人スライム",
+
+          image:
+            "otona-slime.png"
+
+        };
+
+      }
+
+
+      if (level >= 5) {
+
+        return {
+
+          name:
+            "ほどほどのスライム",
+
+          image:
+            "hodohodo-slime.png"
+
+        };
+
+      }
+
+
+      return {
+
+        name:
+          "未熟なスライム",
+
+        image:
+          "mijuku-slime.png"
+
+      };
+
+    }
+
+
+    // =====================================
+    // キャラクター表示更新
+    // =====================================
+
+    function renderCharacter() {
+
+      const totalExp =
+        expData.totalExp;
+
+
+      const level =
+        calculateLevel(
+          totalExp
+        );
+
+
+      const character =
+        getCharacter(level);
+
+
+      // ===================================
+      // スライム画像
+      // ===================================
+
+      const characterIcon =
+        document.getElementById(
+          "characterIcon"
+        );
+
+
+      characterIcon.src =
+        character.image;
+
+
+      characterIcon.alt =
+        character.name;
+
+
+      // ===================================
+      // 名前
+      // ===================================
+
+      document.getElementById(
+        "characterName"
+      ).textContent =
+        character.name;
+
+
+      // ===================================
+      // レベル
+      // ===================================
+
+      document.getElementById(
+        "characterLevel"
+      ).textContent =
+        "Lv." + level;
+
+
+      // ===================================
+      // EXPゲージ
+      // ===================================
+
+      const currentLevelExp =
+        levelTable[
+          level - 1
+        ];
+
+
+      if (level === 50) {
+
+        document.getElementById(
+          "expText"
+        ).textContent =
+          "MAX LEVEL";
+
+
+        document.getElementById(
+          "expFill"
+        ).style.width =
+          "100%";
+
+      } else {
+
+
+        const nextLevelExp =
+          levelTable[level];
+
+
+        const currentExp =
+          totalExp -
+          currentLevelExp;
+
+
+        const requiredExp =
+          nextLevelExp -
+          currentLevelExp;
+
+
+        const expPercent =
+          (
+            currentExp /
+            requiredExp
+          ) * 100;
+
+
+        document.getElementById(
+          "expText"
+        ).textContent =
+          currentExp +
+          " / " +
+          requiredExp;
+
+
+        document.getElementById(
+          "expFill"
+        ).style.width =
+          expPercent + "%";
+
+      }
+
+
+      // ===================================
+      // 累計EXP
+      // ===================================
+
+      document.getElementById(
+        "totalExp"
+      ).textContent =
+        "累計経験値：" +
+        totalExp +
+        " EXP";
+
+    }
+
+
+    // =====================================
+    // タスク追加
+    // =====================================
+
+    async function addTask() {
+
+      const input =
+        document.getElementById(
+          "taskInput"
+        );
+
+
+      const title =
+        input.value.trim();
+
+
+      if (
+        !title ||
+        !currentUser
+      ) {
+
+        return;
+
+      }
+
+
+      const taskType =
+        document.querySelector(
+          'input[name="taskType"]:checked'
+        ).value;
+
+
+      try {
+
+        const { error } =
+          await supabaseClient
+            .from("tasks")
+            .insert({
+
+              user_id:
+                currentUser.id,
+
+              title,
+
+              task_type:
+                taskType,
+
+              status:
+                "active",
+
+              points: 0
+
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        input.value = "";
+
+
+        await loadTasks();
+
+
+        input.focus();
+
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // タスク編集
+    // =====================================
+
+    async function editTask(id) {
+
+      const task =
+        tasks.find(
+          t => t.id === id
+        );
+
+
+      if (!task) {
+        return;
+      }
+
+
+      const title =
+        prompt(
+          "タスクを編集してください",
+          task.text
+        );
+
+
+      if (title === null) {
+        return;
+      }
+
+
+      if (
+        !title.trim() ||
+        title.trim().length > 200
+      ) {
+
+        alert(
+          "タスクは1〜200文字で入力してください"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        await updateTaskRow(
+          id,
+          {
+            title:
+              title.trim()
+          }
+        );
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // タスク削除
+    // =====================================
+
+    async function deleteTask(id) {
+
+      if (
+        !confirm(
+          "このタスクを削除しますか？"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      const task =
+        tasks.find(
+          t => t.id === id
+        );
+
+
+      const oldExp =
+        expData.totalExp;
+
+
+      const oldLevel =
+        calculateLevel(
+          oldExp
+        );
+
+
+      try {
+
+        const { error } =
+          await supabaseClient
+            .from("tasks")
+            .delete()
+            .eq(
+              "id",
+              id
+            )
+            .eq(
+              "user_id",
+              currentUser.id
+            );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        await loadTasks();
+
+
+        if (
+          task &&
+          task.archived
+        ) {
+
+          showToast(
+            "🗑️ 完了済みタスクを削除 −" +
+            (
+              oldExp -
+              expData.totalExp
+            ) +
+            " EXP"
+          );
+
+
+          const newLevel =
+            calculateLevel(
+              expData.totalExp
+            );
+
+
+          if (
+            newLevel <
+            oldLevel
+          ) {
+
+            showToast(
+              "レベル変更：Lv." +
+              oldLevel +
+              " → Lv." +
+              newLevel
+            );
+
+          }
+
+        }
+
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // タスク完了
+    // =====================================
+
+    async function archiveTask(id) {
+
+      const task =
+        tasks.find(
+          t => t.id === id
+        );
+
+
+      if (
+        !task ||
+        task.archived
+      ) {
+
+        return;
+
+      }
+
+
+      const oldExp =
+        expData.totalExp;
+
+
+      const oldLevel =
+        calculateLevel(
+          oldExp
+        );
+
+
+      const beforeToday =
+        getExpBreakdown()
+          .counts[
+            dateKey(new Date())
+          ] || 0;
+
+
+      try {
+
+        await updateTaskRow(
+          id,
+          {
+
+            status:
+              "completed",
+
+            completed_at:
+              new Date()
+                .toISOString(),
+
+            points:
+              TASK_EXP
+
+          }
+        );
+
+
+        const gained =
+          expData.totalExp -
+          oldExp;
+
+
+        showToast(
+          "✅ タスク完了！ +" +
+          gained +
+          " EXP"
+        );
+
+
+        const afterToday =
+          getExpBreakdown()
+            .counts[
+              dateKey(new Date())
+            ] || 0;
+
+
+        if (
+          beforeToday <
+            DAILY_GOAL &&
+          afterToday >=
+            DAILY_GOAL
+        ) {
+
+          showToast(
+            "🎯 今日の5タスク達成！ ボーナス +" +
+            DAILY_BONUS_EXP +
+            " EXP"
+          );
+
+        }
+
+
+        const newLevel =
+          calculateLevel(
+            expData.totalExp
+          );
+
+
+        if (
+          newLevel >
+          oldLevel
+        ) {
+
+          showToast(
+            "🎉 LEVEL UP！ Lv." +
+            oldLevel +
+            " → Lv." +
+            newLevel,
+            true
+          );
+
+        }
+
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // 完了取り消し
+    // =====================================
+
+    async function restoreTask(id) {
+
+      const task =
+        tasks.find(
+          t => t.id === id
+        );
+
+
+      if (
+        !task ||
+        !task.archived
+      ) {
+
+        return;
+
+      }
+
+
+      const oldExp =
+        expData.totalExp;
+
+
+      const oldLevel =
+        calculateLevel(
+          oldExp
+        );
+
+
+      try {
+
+        await updateTaskRow(
+          id,
+          {
+
+            status:
+              "active",
+
+            completed_at:
+              null,
+
+            points:
+              0
+
+          }
+        );
+
+
+        showToast(
+          "↩️ 完了を取り消しました −" +
+          (
+            oldExp -
+            expData.totalExp
+          ) +
+          " EXP"
+        );
+
+
+        const newLevel =
+          calculateLevel(
+            expData.totalExp
+          );
+
+
+        if (
+          newLevel <
+          oldLevel
+        ) {
+
+          showToast(
+            "レベル変更：Lv." +
+            oldLevel +
+            " → Lv." +
+            newLevel
+          );
+
+        }
+
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // タスク移動
+    // =====================================
+
+    async function moveTask(
+      id,
+      newType
+    ) {
+
+      try {
+
+        await updateTaskRow(
+          id,
+          {
+            task_type:
+              newType
+          }
+        );
+
+      } catch (e) {
+
+        showDbError(e);
+
+      }
+
+    }
+
+
+    // =====================================
+    // タスク一覧
+    // =====================================
 
     function renderTasks() {
 
-      const taskList = document.getElementById("taskList");
+      const taskList =
+        document.getElementById(
+          "taskList"
+        );
 
-      const weekTaskList = document.getElementById("weekTaskList");
 
-      const archiveList = document.getElementById("archiveList");
+      const weekTaskList =
+        document.getElementById(
+          "weekTaskList"
+        );
 
 
-      // 表示内容をリセット
+      const archiveList =
+        document.getElementById(
+          "archiveList"
+        );
+
 
       taskList.innerHTML = "";
 
@@ -1121,61 +2038,89 @@ async function moveTask(id, newType) {
 
 
       // ===================================
-      // 今日やるタスク
+      // 今日
       // ===================================
 
-      const todayTasks = tasks.filter(task => {
+      const todayTasks =
+        tasks.filter(
+          task =>
 
-        return !task.archived &&
-          (task.taskType === "today" || !task.taskType);
+            !task.archived &&
 
-      });
+            (
+              task.taskType ===
+                "today" ||
 
-
-
-      // ===================================
-      // 今週中にやるタスク
-      // ===================================
-
-      const weekTasks = tasks.filter(task => {
-
-        return !task.archived &&
-          task.taskType === "week";
-
-      });
-
+              !task.taskType
+            )
+        );
 
 
       // ===================================
-      // 今日完了したタスク
+      // 今週
       // ===================================
 
-      const today = new Date().toLocaleDateString("sv-SE");
+      const weekTasks =
+        tasks.filter(
+          task =>
 
+            !task.archived &&
 
-      const archivedTasks = tasks.filter(task => {
-
-        if (!task.archived || !task.archivedAt) {
-          return false;
-        }
-
-
-        const archivedDate = new Date(
-          task.archivedAt
-        ).toLocaleDateString("sv-SE");
-
-
-        return archivedDate === today;
-
-      });
-
+            task.taskType ===
+              "week"
+        );
 
 
       // ===================================
-      // 今日やるタスクを表示
+      // 今日完了
       // ===================================
 
-      if (todayTasks.length === 0) {
+      const today =
+        new Date()
+          .toLocaleDateString(
+            "sv-SE"
+          );
+
+
+      const archivedTasks =
+        tasks.filter(
+          task => {
+
+            if (
+              !task.archived ||
+              !task.archivedAt
+            ) {
+
+              return false;
+
+            }
+
+
+            const archivedDate =
+              new Date(
+                task.archivedAt
+              )
+                .toLocaleDateString(
+                  "sv-SE"
+                );
+
+
+            return (
+              archivedDate ===
+              today
+            );
+
+          }
+        );
+
+
+      // ===================================
+      // 今日のタスク表示
+      // ===================================
+
+      if (
+        todayTasks.length === 0
+      ) {
 
         taskList.innerHTML = `
           <p class="empty-message">
@@ -1186,23 +2131,26 @@ async function moveTask(id, newType) {
       }
 
 
-      todayTasks.forEach(task => {
+      todayTasks.forEach(
+        task => {
 
-        createTaskElement(
-          task,
-          taskList,
-          "today"
-        );
+          createTaskElement(
+            task,
+            taskList,
+            "today"
+          );
 
-      });
-
+        }
+      );
 
 
       // ===================================
-      // 今週中にやるタスクを表示
+      // 今週のタスク表示
       // ===================================
 
-      if (weekTasks.length === 0) {
+      if (
+        weekTasks.length === 0
+      ) {
 
         weekTaskList.innerHTML = `
           <p class="empty-message">
@@ -1213,23 +2161,26 @@ async function moveTask(id, newType) {
       }
 
 
-      weekTasks.forEach(task => {
+      weekTasks.forEach(
+        task => {
 
-        createTaskElement(
-          task,
-          weekTaskList,
-          "week"
-        );
+          createTaskElement(
+            task,
+            weekTaskList,
+            "week"
+          );
 
-      });
-
+        }
+      );
 
 
       // ===================================
-      // 今日完了したタスクを表示
+      // 完了タスク表示
       // ===================================
 
-      if (archivedTasks.length === 0) {
+      if (
+        archivedTasks.length === 0
+      ) {
 
         archiveList.innerHTML = `
           <p class="empty-message">
@@ -1240,207 +2191,333 @@ async function moveTask(id, newType) {
       }
 
 
-      archivedTasks.forEach(task => {
+      archivedTasks.forEach(
+        task => {
 
-        const item = document.createElement("div");
-
-        item.className = "task-item";
-
-
-        const textContainer = document.createElement("div");
-
-        textContainer.className = "task-text";
+          const item =
+            document.createElement(
+              "div"
+            );
 
 
-        const text = document.createElement("div");
-
-        text.className = "archived-text";
-
-        text.textContent = task.text;
+          item.className =
+            "task-item";
 
 
-        const date = document.createElement("div");
-
-        date.className = "archive-date";
-
-
-        date.textContent =
-          "完了日：" +
-          new Date(task.archivedAt).toLocaleDateString("ja-JP");
+          const textContainer =
+            document.createElement(
+              "div"
+            );
 
 
-        textContainer.append(
-          text,
-          date
-        );
+          textContainer.className =
+            "task-text";
 
 
-        const buttons = document.createElement("div");
-
-        buttons.className = "task-buttons";
-
-
-        // 戻すボタン
-
-        const restoreButton = document.createElement("button");
-
-        restoreButton.className = "restore-btn";
-
-        restoreButton.textContent = "戻す";
-
-        restoreButton.addEventListener("click", () => {
-
-          restoreTask(task.id);
-
-        });
+          const text =
+            document.createElement(
+              "div"
+            );
 
 
-
-        // 削除ボタン
-
-        const deleteButton = document.createElement("button");
-
-        deleteButton.className = "delete-btn";
-
-        deleteButton.textContent = "削除";
-
-        deleteButton.addEventListener("click", () => {
-
-          deleteTask(task.id);
-
-        });
+          text.className =
+            "archived-text";
 
 
-
-        buttons.append(
-          restoreButton,
-          deleteButton
-        );
+          text.textContent =
+            task.text;
 
 
-        item.append(
-          textContainer,
-          buttons
-        );
+          const date =
+            document.createElement(
+              "div"
+            );
 
 
-        archiveList.appendChild(item);
+          date.className =
+            "archive-date";
 
-      });
+
+          date.textContent =
+            "完了日：" +
+            new Date(
+              task.archivedAt
+            )
+              .toLocaleDateString(
+                "ja-JP"
+              );
+
+
+          textContainer.append(
+            text,
+            date
+          );
+
+
+          const buttons =
+            document.createElement(
+              "div"
+            );
+
+
+          buttons.className =
+            "task-buttons";
+
+
+          const restoreButton =
+            document.createElement(
+              "button"
+            );
+
+
+          restoreButton.className =
+            "restore-btn";
+
+
+          restoreButton.textContent =
+            "戻す";
+
+
+          restoreButton.addEventListener(
+            "click",
+            () => {
+
+              restoreTask(
+                task.id
+              );
+
+            }
+          );
+
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+
+          deleteButton.className =
+            "delete-btn";
+
+
+          deleteButton.textContent =
+            "削除";
+
+
+          deleteButton.addEventListener(
+            "click",
+            () => {
+
+              deleteTask(
+                task.id
+              );
+
+            }
+          );
+
+
+          buttons.append(
+            restoreButton,
+            deleteButton
+          );
+
+
+          item.append(
+            textContainer,
+            buttons
+          );
+
+
+          archiveList.appendChild(
+            item
+          );
+
+        }
+      );
 
     }
 
 
+    // =====================================
+    // タスク要素作成
+    // =====================================
 
-    // ===================================
-    // ⑩ タスク表示用の関数
-    // ===================================
+    function createTaskElement(
+      task,
+      container,
+      type
+    ) {
 
-    function createTaskElement(task, container, type) {
-
-      const item = document.createElement("div");
-
-      item.className = "task-item";
-
-
-      // タスクの内容
-
-      const text = document.createElement("div");
-
-      text.className = "task-text";
-
-      text.textContent = task.text;
+      const item =
+        document.createElement(
+          "div"
+        );
 
 
-
-      // ボタンの入れ物
-
-      const buttons = document.createElement("div");
-
-      buttons.className = "task-buttons";
+      item.className =
+        "task-item";
 
 
-
-      // 編集ボタン
-
-      const editButton = document.createElement("button");
-
-      editButton.className = "edit-btn";
-
-      editButton.textContent = "編集";
-
-      editButton.addEventListener("click", () => {
-
-        editTask(task.id);
-
-      });
+      const text =
+        document.createElement(
+          "div"
+        );
 
 
-
-      // 完了ボタン
-
-      const archiveButton = document.createElement("button");
-
-      archiveButton.className = "archive-btn";
-
-      archiveButton.textContent = "完了";
-
-      archiveButton.addEventListener("click", () => {
-
-        archiveTask(task.id);
-
-      });
+      text.className =
+        "task-text";
 
 
-
-      // タスク移動ボタン
-
-      const moveButton = document.createElement("button");
-
-      moveButton.className = "move-btn";
+      text.textContent =
+        task.text;
 
 
-      if (type === "today") {
+      const buttons =
+        document.createElement(
+          "div"
+        );
 
-        moveButton.textContent = "今週中に移動";
 
-        moveButton.addEventListener("click", () => {
+      buttons.className =
+        "task-buttons";
 
-          moveTask(task.id, "week");
 
-        });
+      // 編集
+
+      const editButton =
+        document.createElement(
+          "button"
+        );
+
+
+      editButton.className =
+        "edit-btn";
+
+
+      editButton.textContent =
+        "編集";
+
+
+      editButton.addEventListener(
+        "click",
+        () => {
+
+          editTask(
+            task.id
+          );
+
+        }
+      );
+
+
+      // 完了
+
+      const archiveButton =
+        document.createElement(
+          "button"
+        );
+
+
+      archiveButton.className =
+        "archive-btn";
+
+
+      archiveButton.textContent =
+        "完了";
+
+
+      archiveButton.addEventListener(
+        "click",
+        () => {
+
+          archiveTask(
+            task.id
+          );
+
+        }
+      );
+
+
+      // 移動
+
+      const moveButton =
+        document.createElement(
+          "button"
+        );
+
+
+      moveButton.className =
+        "move-btn";
+
+
+      if (
+        type === "today"
+      ) {
+
+        moveButton.textContent =
+          "今週中に移動";
+
+
+        moveButton.addEventListener(
+          "click",
+          () => {
+
+            moveTask(
+              task.id,
+              "week"
+            );
+
+          }
+        );
 
       } else {
 
-        moveButton.textContent = "今日やる";
+        moveButton.textContent =
+          "今日やる";
 
-        moveButton.addEventListener("click", () => {
 
-          moveTask(task.id, "today");
+        moveButton.addEventListener(
+          "click",
+          () => {
 
-        });
+            moveTask(
+              task.id,
+              "today"
+            );
+
+          }
+        );
 
       }
 
 
+      // 削除
 
-      // 削除ボタン
-
-      const deleteButton = document.createElement("button");
-
-      deleteButton.className = "delete-btn";
-
-      deleteButton.textContent = "削除";
-
-      deleteButton.addEventListener("click", () => {
-
-        deleteTask(task.id);
-
-      });
+      const deleteButton =
+        document.createElement(
+          "button"
+        );
 
 
+      deleteButton.className =
+        "delete-btn";
 
-      // ボタンをまとめる
+
+      deleteButton.textContent =
+        "削除";
+
+
+      deleteButton.addEventListener(
+        "click",
+        () => {
+
+          deleteTask(
+            task.id
+          );
+
+        }
+      );
+
 
       buttons.append(
         editButton,
@@ -1450,65 +2527,86 @@ async function moveTask(id, newType) {
       );
 
 
-      // タスクを表示
-
       item.append(
         text,
         buttons
       );
 
 
-      container.appendChild(item);
+      container.appendChild(
+        item
+      );
 
     }
 
 
-
-    // ===================================
-    // ⑪ 今週の期間を表示
-    // ===================================
+    // =====================================
+    // 今週の期間
+    // =====================================
 
     function showWeekRange() {
 
-      const today = new Date();
+      const today =
+        new Date();
 
 
-      // 今週の月曜日を取得
-
-      const monday = new Date(today);
-
-      const day = today.getDay();
-
-      const diff = day === 0 ? -6 : 1 - day;
-
-      monday.setDate(today.getDate() + diff);
+      const monday =
+        new Date(today);
 
 
-      // 今週の日曜日を取得
-
-      const sunday = new Date(monday);
-
-      sunday.setDate(monday.getDate() + 6);
+      const day =
+        today.getDay();
 
 
-      // 日付を整形
-
-      const formatDate = date => {
-
-        return date.toLocaleDateString("ja-JP", {
-
-          month: "long",
-          day: "numeric",
-          weekday: "short"
-
-        });
-
-      };
+      const diff =
+        day === 0
+          ? -6
+          : 1 - day;
 
 
-      // 画面に表示
+      monday.setDate(
+        today.getDate() +
+        diff
+      );
 
-      document.getElementById("weekRange").textContent =
+
+      const sunday =
+        new Date(monday);
+
+
+      sunday.setDate(
+        monday.getDate() +
+        6
+      );
+
+
+      const formatDate =
+        date => {
+
+          return date
+            .toLocaleDateString(
+              "ja-JP",
+              {
+
+                month:
+                  "long",
+
+                day:
+                  "numeric",
+
+                weekday:
+                  "short"
+
+              }
+            );
+
+        };
+
+
+      document.getElementById(
+        "weekRange"
+      ).textContent =
+
         formatDate(monday) +
         " 〜 " +
         formatDate(sunday);
@@ -1516,28 +2614,23 @@ async function moveTask(id, newType) {
     }
 
 
+    // =====================================
+    // タスク登録
+    // =====================================
 
-    // ===================================
-    // ⑫ 登録ボタン・Enterキーの処理
-    // ===================================
+    document.getElementById(
+      "taskForm"
+    )
+      .addEventListener(
+        "submit",
+        function(event) {
 
-    document.getElementById("taskForm")
-      .addEventListener("submit", function(event) {
+          event.preventDefault();
 
-        event.preventDefault();
+          addTask();
 
-        addTask();
-
-      });
-
-
-
-    // ===================================
-    // ⑬ 初期表示
-    // ===================================
-
-    // 認証後にcheckLogin()から初期表示する
-
+        }
+      );
 
   </script>
 
