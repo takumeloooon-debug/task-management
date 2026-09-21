@@ -334,13 +334,13 @@
 
 if (data.user) {
 
-  message.textContent =
-    "ログインに成功しました！";
-
+  message.textContent = "ログインに成功しました！";
   message.className = "message success";
 
+  console.log("ログイン成功。index.htmlへ移動します");
+
   // index.htmlへ移動
-  window.location.replace("./index.html");
+  window.location.assign("./index.html");
 
 }
 
