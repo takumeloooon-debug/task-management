@@ -299,37 +299,73 @@
     }
 
     /* ===================================
-   キャラクター育成画面
+   コンパクトなキャラクター表示
 =================================== */
-
 .character-card {
-  text-align: center;
+  padding: 18px 22px;
+  text-align: left;
 }
-
-
-/* キャラクター表示 */
-
-.character-area {
-  padding: 20px 0;
+.character-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
-
 .character-icon {
-  font-size: 70px;
-  margin-bottom: 10px;
+  font-size: 42px;
+  line-height: 1;
+  flex-shrink: 0;
 }
-
+.character-details {
+  flex: 1;
+  min-width: 0;
+}
 .character-name {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
-
 .character-level {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: bold;
   color: #7354c5;
 }
-
+.mypage-link {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #eee9ff;
+  color: #7354c5;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.mypage-link:hover {
+  background: #ddd3ff;
+}
+.character-card .exp-area { margin-top: 14px; }
+.character-card .exp-bar { height: 10px; }
+.character-card .total-exp {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 11px;
+}
+.daily-progress {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 11px;
+  color: #888;
+  line-height: 1.6;
+}
+@media (max-width: 600px) {
+  .character-card { padding: 16px; }
+  .character-summary { gap: 10px; }
+  .character-icon { font-size: 36px; }
+  .character-name { font-size: 14px; }
+  .character-level { font-size: 15px; }
+  .mypage-link { padding: 7px 9px; font-size: 11px; }
+}
 
 /* ===================================
    経験値ゲージ
@@ -452,79 +488,35 @@
     </p>
 
     <!-- ===================================
-     キャラクター育成画面
+     コンパクトなキャラクター表示
 =================================== -->
-
 <div class="card character-card">
-
-  <h2>キャラクター育成</h2>
-
-  <!-- キャラクター表示 -->
-
-  <div class="character-area">
-
-    <div id="characterIcon" class="character-icon">
-      💧
+  <div class="character-summary">
+    <div id="characterIcon" class="character-icon">💧</div>
+    <div class="character-details">
+      <div id="characterName" class="character-name">スライム</div>
+      <div id="characterLevel" class="character-level">Lv.1</div>
     </div>
-
-    <div id="characterName" class="character-name">
-      スライム
-    </div>
-
-    <div id="characterLevel" class="character-level">
-      Lv.1
-    </div>
-
+    <a href="mypage.html" class="mypage-link">マイページ →</a>
   </div>
-
-
-  <!-- 経験値ゲージ -->
 
   <div class="exp-area">
-
     <div class="exp-info">
-
       <span>EXP</span>
-
-      <span id="expText">
-        0 / 20
-      </span>
-
+      <span id="expText">0 / 20</span>
     </div>
-
-
     <div class="exp-bar">
-
-      <div
-        id="expFill"
-        class="exp-fill"
-      ></div>
-
+      <div id="expFill" class="exp-fill"></div>
     </div>
-
   </div>
 
-
-  <!-- 累計経験値 -->
-
-<p id="totalExp" class="total-exp">
-  累計経験値：0 EXP
-</p>
-
-<!-- 今日のタスク達成状況 -->
-
-<p class="total-exp">
-  🎁 1日5件達成すると、ボーナス10 EXPが入るよ！<br>
-  <span id="dailyProgress">現在 0 / 5 タスク</span>
-</p>
-
-
-  <!-- レベルアップ通知 -->
-
+  <p id="totalExp" class="total-exp">累計経験値：0 EXP</p>
+  <p class="daily-progress">
+    🎁 1日5件達成でボーナス10 EXP！<br>
+    <span id="dailyProgress">現在 0 / 5 タスク</span>
+  </p>
   <p id="levelMessage" class="level-message"></p>
-
 </div>
-
 
     <!-- ===================================
          タスク登録
