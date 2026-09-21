@@ -1,1 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>新規登録 | タスク管理アプリ</title>
+
+  <!-- Supabaseのライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f6f4ff;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 80px auto;
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #fafafa;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #9b8ce5;
+      background: white;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 28px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #9b8ce5;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #8574d8;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .success {
+      color: #24834b;
+    }
+
+    .error {
+      color: #d93025;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 14px;
+    }
+
+    a {
+      color: #8574d8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+
+      .container {
+        margin: 40px auto;
+        padding: 24px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>新規登録</h1>
+
+    <p class="description">
+      アカウントを作成して、タスク管理を始めよう！
+    </p>
+
+    <form id="signupForm">
+
+      <!-- ユーザー名 -->
+
+      <label for="username">
+        ユーザー名
+      </label>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="ユーザー名を入力"
+        minlength="3"
+        maxlength="30"
+        required
+      >
+
+
+      <!-- メールアドレス -->
+
+      <label for="email">
+        メールアドレス
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="example@gmail.com"
+        autocomplete="email"
+        required
+      >
+
+
+      <!-- パスワード -->
+
+      <label for="password">
+        パスワード
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="8文字以上"
+        minlength="8"
+        autocomplete="new-password"
+        required
+      >
+
+
+      <!-- 登録ボタン -->
+
+      <button type="submit" id="signupButton">
+        新規登録
+      </button>
+
+    </form>
+
+
+    <!-- メッセージ表示 -->
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+
+    <!-- ログイン画面へのリンク -->
+
+    <div class="login-link">
+
+      すでにアカウントをお持ちの方は<br>
+
+      <a href="login.html">
+        ログインはこちら
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // ========================================
+    // ① Supabaseの接続設定
+    // ========================================
+
+    const SUPABASE_URL = "https://takumeloooon.github.io/task-manager/login.html";
+
+    const SUPABASE_KEY = "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EA";
+
+    const db = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // ========================================
+    // ② HTMLの要素を取得
+    // ========================================
+
+    const signupForm =
+      document.getElementById("signupForm");
+
+    const signupButton =
+      document.getElementById("signupButton");
+
+    const message =
+      document.getElementById("message");
+
+
+    // ========================================
+    // ③ メッセージ表示
+    // ========================================
+
+    function showMessage(text, type) {
+
+      message.textContent = text;
+
+      message.className = "message " + type;
+
+    }
+
+
+    // ========================================
+    // ④ 新規登録処理
+    // ========================================
+
+    signupForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        // フォーム送信によるページ更新を防ぐ
+        event.preventDefault();
+
+        // 入力内容を取得
+        const username =
+          document.getElementById("username").value.trim();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+
+        // 入力チェック
+        if (
+          username.length < 3 ||
+          username.length > 30
+        ) {
+
+          showMessage(
+            "ユーザー名は3〜30文字で入力してください。",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (password.length < 8) {
+
+          showMessage(
+            "パスワードは8文字以上で入力してください。",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        // ボタンの連続クリックを防ぐ
+        signupButton.disabled = true;
+
+        showMessage(
+          "登録処理中です...",
+          ""
+        );
+
+
+        try {
+
+          // ========================================
+          // ⑤ Supabaseにユーザーを登録
+          // ========================================
+
+          const { data, error } =
+            await db.auth.signUp({
+
+              email: email,
+
+              password: password,
+
+              options: {
+
+                // ユーザー名を認証情報のメタデータに保存
+                data: {
+                  username: username
+                },
+
+                // メール認証後の移動先
+                emailRedirectTo:
+                  new URL(
+                    "login.html",
+                    window.location.href
+                  ).href
+
+              }
+
+            });
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          // ========================================
+          // ⑥ 登録完了メッセージ
+          // ========================================
+
+          if (data.user) {
+
+            showMessage(
+              "登録を受け付けました！\n確認メールを送信しました。\nメール内のリンクから認証を完了してください。",
+              "success"
+            );
+
+            signupForm.reset();
+
+          } else {
+
+            showMessage(
+              "登録状況を確認できませんでした。時間をおいて再度お試しください。",
+              "error"
+            );
+
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          showMessage(
+            "登録に失敗しました。\n" + error.message,
+            "error"
+          );
+
+        } finally {
+
+          signupButton.disabled = false;
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
