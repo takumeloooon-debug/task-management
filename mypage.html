@@ -52,9 +52,13 @@
       margin-bottom: 24px;
     }
 
+    /* キャラクター画像 */
     .character-icon {
-      font-size: 100px;
-      margin-bottom: 12px;
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
     }
 
     .character-name {
@@ -135,18 +139,27 @@
         読み込み中...
       </div>
 
-      <!-- キャラクター -->
-      <div id="characterIcon" class="character-icon">
-        💧
-      </div>
 
+      <!-- キャラクター画像 -->
+      <img
+        id="characterIcon"
+        class="character-icon"
+        src="images/mijuku-slime.png"
+        alt="未熟なスライム"
+      >
+
+
+      <!-- キャラクター名 -->
       <div id="characterName" class="character-name">
-        スライム
+        未熟なスライム
       </div>
 
+
+      <!-- レベル -->
       <div id="characterLevel" class="character-level">
         Lv.1
       </div>
+
 
       <!-- EXP -->
       <div class="exp-area">
@@ -172,12 +185,14 @@
 
       </div>
 
+
       <!-- 累計経験値 -->
       <p id="totalExp" class="total-exp">
         累計経験値：0 EXP
       </p>
 
     </div>
+
 
     <a href="index.html" class="back-link">
       ← タスク管理に戻る
@@ -192,9 +207,11 @@
     // ① Supabaseの設定
     // =====================================
 
-    const SUPABASE_URL = "https://weftzcfogzqtskhklyft.supabase.co";
+    const SUPABASE_URL =
+      "https://weftzcfogzqtskhklyft.supabase.co";
 
-    const SUPABASE_KEY = "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
+    const SUPABASE_KEY =
+      "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
     const db = supabase.createClient(
       SUPABASE_URL,
@@ -227,15 +244,17 @@
       [50, 10800]
     ];
 
+
     const levelTable = Array.from(
       { length: 50 },
       (_, index) => {
 
         const level = index + 1;
 
-        const upperIndex = levelMilestones.findIndex(
-          ([milestone]) => milestone >= level
-        );
+        const upperIndex =
+          levelMilestones.findIndex(
+            ([milestone]) => milestone >= level
+          );
 
         const [endLevel, endExp] =
           levelMilestones[upperIndex];
@@ -252,7 +271,10 @@
           (endLevel - startLevel);
 
         return Math.round(
-          (startExp + (endExp - startExp) * ratio) / 10
+          (
+            startExp +
+            (endExp - startExp) * ratio
+          ) / 10
         ) * 10;
 
       }
@@ -267,12 +289,20 @@
 
       let level = 1;
 
-      for (let i = 0; i < levelTable.length; i++) {
+      for (
+        let i = 0;
+        i < levelTable.length;
+        i++
+      ) {
 
         if (totalExp >= levelTable[i]) {
+
           level = i + 1;
+
         } else {
+
           break;
+
         }
 
       }
@@ -284,49 +314,100 @@
 
     // =====================================
     // ⑤ レベルに応じてキャラクターを変更
-    // index.htmlと同じ進化条件
     // =====================================
 
     function getCharacter(level) {
 
+
+      // Lv.50
       if (level >= 50) {
+
         return {
-          name: "伝説のドラゴン",
-          icon: "🐲"
+
+          name:
+            "ゴッドスライム",
+
+          image:
+            "images/god-slime.png"
+
         };
+
       }
 
-      if (level >= 43) {
+
+      // Lv.40〜49
+      if (level >= 40) {
+
         return {
-          name: "ドラゴン",
-          icon: "🐉"
+
+          name:
+            "キングスライム",
+
+          image:
+            "images/king-slime.png"
+
         };
+
       }
 
+
+      // Lv.30〜39
       if (level >= 30) {
+
         return {
-          name: "ドラゴンの幼体",
-          icon: "🥚"
+
+          name:
+            "スライム伯爵",
+
+          image:
+            "images/slime-hakushaku.png"
+
         };
+
       }
 
+
+      // Lv.15〜29
       if (level >= 15) {
+
         return {
-          name: "スライムキング",
-          icon: "👑"
+
+          name:
+            "大人スライム",
+
+          image:
+            "images/otona-slime.png"
+
         };
+
       }
 
+
+      // Lv.5〜14
       if (level >= 5) {
+
         return {
-          name: "成長したスライム",
-          icon: "💙"
+
+          name:
+            "ほどほどのスライム",
+
+          image:
+            "images/hodohodo-slime.png"
+
         };
+
       }
 
+
+      // Lv.1〜4
       return {
-        name: "スライム",
-        icon: "💧"
+
+        name:
+          "未熟なスライム",
+
+        image:
+          "images/mijuku-slime.png"
+
       };
 
     }
@@ -338,31 +419,57 @@
 
     function calculateTotalExp(tasks) {
 
-      const completed = tasks.filter(
-        task =>
-          task.status === "completed" &&
-          task.completed_at
-      );
+      const completed =
+        tasks.filter(
+          task =>
+            task.status === "completed" &&
+            task.completed_at
+        );
+
+
+      // 日ごとの完了タスク数
 
       const counts = {};
 
+
       for (const task of completed) {
 
-        const day = new Date(
-          task.completed_at
-        ).toLocaleDateString("sv-SE");
+        const day =
+          new Date(
+            task.completed_at
+          ).toLocaleDateString(
+            "sv-SE"
+          );
 
-        counts[day] = (counts[day] || 0) + 1;
+        counts[day] =
+          (counts[day] || 0) + 1;
 
       }
 
-      const bonusDays = Object.values(counts)
-        .filter(count => count >= DAILY_GOAL)
-        .length;
+
+      // 1日5個以上達成した日
+
+      const bonusDays =
+        Object.values(counts)
+          .filter(
+            count =>
+              count >= DAILY_GOAL
+          )
+          .length;
+
+
+      // EXP計算
 
       return (
-        completed.length * TASK_EXP +
-        bonusDays * DAILY_BONUS_EXP
+
+        completed.length *
+        TASK_EXP
+
+        +
+
+        bonusDays *
+        DAILY_BONUS_EXP
+
       );
 
     }
@@ -374,68 +481,140 @@
 
     function renderCharacter(totalExp) {
 
-      const level = calculateLevel(totalExp);
 
-      const character = getCharacter(level);
+      // 現在レベル
 
-      document.getElementById(
-        "characterIcon"
-      ).textContent = character.icon;
+      const level =
+        calculateLevel(totalExp);
+
+
+      // 現在のキャラクター
+
+      const character =
+        getCharacter(level);
+
+
+      // ===================================
+      // キャラクター画像
+      // ===================================
+
+      const characterIcon =
+        document.getElementById(
+          "characterIcon"
+        );
+
+      characterIcon.src =
+        character.image;
+
+      characterIcon.alt =
+        character.name;
+
+
+      // ===================================
+      // キャラクター名
+      // ===================================
 
       document.getElementById(
         "characterName"
-      ).textContent = character.name;
+      ).textContent =
+        character.name;
+
+
+      // ===================================
+      // レベル
+      // ===================================
 
       document.getElementById(
         "characterLevel"
-      ).textContent = "Lv." + level;
+      ).textContent =
+        "Lv." + level;
 
 
+      // ===================================
       // EXPゲージ
+      // ===================================
 
       if (level === 50) {
 
         document.getElementById(
           "expText"
-        ).textContent = "MAX LEVEL";
+        ).textContent =
+          "MAX LEVEL";
+
 
         document.getElementById(
           "expFill"
-        ).style.width = "100%";
+        ).style.width =
+          "100%";
 
       } else {
+
+
+        // 現在レベルになるために必要だったEXP
 
         const currentLevelExp =
           levelTable[level - 1];
 
+
+        // 次レベルに必要な累計EXP
+
         const nextLevelExp =
           levelTable[level];
 
+
+        // 現在レベル内で獲得したEXP
+
         const currentExp =
-          totalExp - currentLevelExp;
+          totalExp -
+          currentLevelExp;
+
+
+        // 次レベルまでに必要なEXP
 
         const requiredExp =
-          nextLevelExp - currentLevelExp;
+          nextLevelExp -
+          currentLevelExp;
+
+
+        // EXPバーの割合
 
         const expPercent =
-          (currentExp / requiredExp) * 100;
+          (
+            currentExp /
+            requiredExp
+          ) * 100;
+
+
+        // EXPテキスト
 
         document.getElementById(
           "expText"
         ).textContent =
-          currentExp + " / " + requiredExp;
+          currentExp +
+          " / " +
+          requiredExp;
+
+
+        // EXPバー
 
         document.getElementById(
           "expFill"
-        ).style.width = expPercent + "%";
+        ).style.width =
+          expPercent + "%";
 
       }
 
 
+      // ===================================
+      // 累計EXP
+      // ===================================
+
       document.getElementById(
         "totalExp"
       ).textContent =
-        "累計経験値：" + totalExp + " EXP";
+        "累計経験値：" +
+        totalExp +
+        " EXP";
 
     }
 
@@ -446,34 +625,53 @@
 
     async function loadMyPage() {
 
+
+      // ===================================
       // ログイン中のユーザーを取得
+      // ===================================
 
       const {
         data: authData,
         error: authError
-      } = await db.auth.getUser();
+      } =
+        await db.auth.getUser();
 
-      if (authError || !authData.user) {
 
-        window.location.replace("./login.html");
+      // ログインしていなければ
+      // login.htmlへ戻す
+
+      if (
+        authError ||
+        !authData.user
+      ) {
+
+        window.location.replace(
+          "./login.html"
+        );
 
         return;
 
       }
 
-      const user = authData.user;
+
+      const user =
+        authData.user;
 
 
+      // ===================================
       // ユーザー名を取得
+      // ===================================
 
       const {
         data: profile,
         error: profileError
-      } = await db
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single();
+      } =
+        await db
+          .from("profiles")
+          .select("username")
+          .eq("id", user.id)
+          .single();
+
 
       if (profileError) {
 
@@ -482,29 +680,44 @@
           profileError
         );
 
+
         document.getElementById(
           "username"
-        ).textContent = "ユーザー名を取得できませんでした";
+        ).textContent =
+          "ユーザー名を取得できませんでした";
 
       } else {
 
         document.getElementById(
           "username"
-        ).textContent = profile.username;
+        ).textContent =
+          profile.username;
 
       }
 
 
-      // 本人のタスクを取得
+      // ===================================
+      // 本人の完了済みタスクを取得
+      // ===================================
 
       const {
         data: tasks,
         error: tasksError
-      } = await db
-        .from("tasks")
-        .select("status, completed_at")
-        .eq("user_id", user.id)
-        .eq("status", "completed");
+      } =
+        await db
+          .from("tasks")
+          .select(
+            "status, completed_at"
+          )
+          .eq(
+            "user_id",
+            user.id
+          )
+          .eq(
+            "status",
+            "completed"
+          );
+
 
       if (tasksError) {
 
@@ -512,6 +725,7 @@
           "タスク取得エラー:",
           tasksError
         );
+
 
         alert(
           "タスクの取得に失敗しました：" +
@@ -523,9 +737,17 @@
       }
 
 
-      // EXPを計算して画面に表示
+      // ===================================
+      // EXPを計算
+      // ===================================
 
-      const totalExp = calculateTotalExp(tasks);
+      const totalExp =
+        calculateTotalExp(tasks);
+
+
+      // ===================================
+      // キャラクター表示
+      // ===================================
 
       renderCharacter(totalExp);
 
@@ -541,4 +763,5 @@
   </script>
 
 </body>
+
 </html>
