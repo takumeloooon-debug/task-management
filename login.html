@@ -185,7 +185,7 @@
 
       <br><br>
 
-      <a href="register.html">
+      <a href="signup.html">
         新規登録はこちら
       </a>
 
@@ -329,22 +329,20 @@
 
 
           // =====================================
-          // ⑥ ログイン成功
-          // =====================================
+// ⑥ ログイン成功
+// =====================================
 
-          if (data.user) {
+if (data.user) {
 
-            message.textContent =
-              "ログインに成功しました！";
+  message.textContent =
+    "ログインに成功しました！";
 
-            message.className = "message success";
+  message.className = "message success";
 
+  // index.htmlへ移動
+  window.location.replace("./index.html");
 
-            // 管理画面へ移動
-
-            window.location.href = "index.html";
-
-          }
+}
 
         } catch (error) {
 
