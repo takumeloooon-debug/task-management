@@ -944,9 +944,8 @@ button:active {
   }
 
 }
-    /* ===================================
+/* ===================================
    RPG風ヘッダー背景
-   雲・草原・城
 =================================== */
 
 .rpg-header-background {
@@ -962,9 +961,11 @@ button:active {
 
   background-repeat: no-repeat;
 
-  background-position: center bottom;
+  /* 画像の大きさを固定 */
+  background-size: 1400px auto;
 
-  background-size: 80% auto;
+  /* 城がある右側を基準に配置 */
+  background-position: right bottom;
 
   image-rendering: pixelated;
 
@@ -973,23 +974,12 @@ button:active {
   z-index: 0;
 }
 
-
-/* タスク管理画面を背景より手前に表示 */
-
-.container {
-  position: relative;
-  z-index: 1;
-}
-
-
-/* スマホ対応 */
-
-@media (max-width: 600px) {
+    @media (max-width: 600px) {
 
   .rpg-header-background {
-    height: 175px;
+    height: 180px;
 
-    background-size: auto 175px;
+    background-size: 900px auto;
 
     background-position: right bottom;
   }
