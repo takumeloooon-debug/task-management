@@ -1011,10 +1011,69 @@ button:active {
   }
 }
 
+    /* ===================================
+   RPG風フッター背景
+   PC・スマホ対応
+=================================== */
+
+.rpg-footer-background {
+
+  position: relative;
+
+  width: 100%;
+
+  /* 元画像：2156 × 325px */
+  aspect-ratio: 2156 / 325;
+
+  background-image: url("images/rpg-footer.png");
+
+  background-repeat: no-repeat;
+
+  /* PC：画面幅に合わせて画像全体を表示 */
+  background-size: 100% auto;
+
+  /* 画像の下端を基準に配置 */
+  background-position: center bottom;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+}
+
+
+/* ===================================
+   スマホ版
+=================================== */
+
+@media (max-width: 600px) {
+
+  .rpg-footer-background {
+
+    /* スマホでは背景の表示エリアを固定 */
+    height: 180px;
+
+    /* PC用の縦横比指定を解除 */
+    aspect-ratio: auto;
+
+    /*
+      スマホでは画像を縮小しすぎず、
+      木や鳥が見えるよう中央を基準に配置
+    */
+    background-size: 900px auto;
+
+    background-position: center bottom;
+
+  }
+
+}
+
   </style>
 
 </head>
-
+  
 
 <body>
 
@@ -3156,6 +3215,12 @@ button:active {
       );
 
   </script>
+
+  <!-- ===================================
+     RPG風フッター背景
+=================================== -->
+
+<div class="rpg-footer-background"></div>
 
 </body>
 
