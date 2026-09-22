@@ -946,6 +946,7 @@ button:active {
 }
 /* ===================================
    RPG風ヘッダー背景
+   PC・スマホ対応
 =================================== */
 
 .rpg-header-background {
@@ -955,17 +956,19 @@ button:active {
   left: 0;
 
   width: 100%;
-  height: 240px;
+
+  /* 元画像：2156 × 325px */
+  aspect-ratio: 2156 / 325;
 
   background-image: url("images/rpg-header.png");
 
   background-repeat: no-repeat;
 
-  /* 画像の大きさを固定 */
-  background-size: 1300px auto;
+  /* PC：画面幅に合わせて画像全体を表示 */
+  background-size: 100% auto;
 
-  /* 城がある右側を基準に配置 */
-  background-position: right top;
+  /* 画像の上端を基準に配置 */
+  background-position: center top;
 
   image-rendering: pixelated;
 
@@ -974,12 +977,25 @@ button:active {
   z-index: 0;
 }
 
-    @media (max-width: 600px) {
+
+/* ===================================
+   スマホ版
+=================================== */
+
+@media (max-width: 600px) {
 
   .rpg-header-background {
+    /* スマホでは背景の表示エリアを固定 */
     height: 180px;
 
-    background-size: 700px auto;
+    /* PC用の縦横比指定を解除 */
+    aspect-ratio: auto;
+
+    /*
+      スマホでは画像を縮小しすぎず、
+      城が見えるよう右側を基準に配置
+    */
+    background-size: 1100px auto;
 
     background-position: right top;
   }
