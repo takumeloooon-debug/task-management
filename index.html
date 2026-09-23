@@ -64,6 +64,61 @@ body {
   display: none !important;
 }
 
+  /* ===================================
+   ヘッダー文字の視認性改善
+=================================== */
+
+/* タイトル */
+.header-title {
+
+  /* 半透明の白い背景 */
+  background: rgba(255, 255, 255, 0.85);
+
+  /* 文字と背景の間の余白 */
+  padding: 8px 20px;
+
+  /* 角を丸くする */
+  border-radius: 12px;
+
+  /* 背景を文字の幅に合わせる */
+  width: fit-content;
+
+  /* 中央配置 */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* 背景画像より前面に表示 */
+  position: relative;
+  z-index: 1;
+
+}
+
+
+/* サブタイトル */
+.header-subtitle {
+
+  /* 半透明の白い背景 */
+  background: rgba(255, 255, 255, 0.85);
+
+  /* 文字と背景の間の余白 */
+  padding: 8px 16px;
+
+  /* 角を丸くする */
+  border-radius: 12px;
+
+  /* 背景を文字の幅に合わせる */
+  width: fit-content;
+
+  /* 中央配置 */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* 背景画像より前面に表示 */
+  position: relative;
+  z-index: 1;
+
+}
+
 
 /* ===================================
    全体コンテナ
@@ -1101,16 +1156,17 @@ body {
          タイトル
     =================================== -->
 
-    <h1>タスク管理</h1>
+    <h1 class="header-title">
+  タスク管理
+</h1>
 
-    <button id="logoutButton">
-      ログアウト
-    </button>
+<button id="logoutButton">
+  ログアウト
+</button>
 
-    <p class="subtitle">
-      今日やることを決めて、一つずつ進めよう。
-    </p>
-
+<p class="subtitle header-subtitle">
+  今日やることを決めて、一つずつ進めよう。
+</p>
 
     <!-- ===================================
          キャラクター表示
