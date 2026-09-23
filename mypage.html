@@ -16,192 +16,662 @@
 
   <style>
 
+    /* ===================================
+       全体
+    =================================== */
+
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
-      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family:
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        "Yu Gothic",
+        "Meiryo",
+        sans-serif;
+
       background: #f7f7fb;
       color: #333;
-      margin: 0;
-      padding: 20px;
+
+      min-height: 100vh;
+
+      display: flex;
+      flex-direction: column;
     }
+
+
+    /* ===================================
+       RPG風ヘッダー
+    =================================== */
+
+    .rpg-header {
+      position: relative;
+
+      width: 100%;
+      height: 240px;
+
+      background-image:
+        url("images/rpg-header.png");
+
+      background-repeat: no-repeat;
+
+      background-position:
+        center top;
+
+      background-size:
+        cover;
+
+      display: flex;
+
+      justify-content:
+        center;
+
+      align-items:
+        flex-start;
+
+      padding-top:
+        35px;
+    }
+
+
+    /* ===================================
+       ページタイトル
+    =================================== */
+
+    .page-title {
+
+      margin: 0;
+
+      padding:
+        10px 24px;
+
+      background:
+        rgba(255, 255, 255, 0.88);
+
+      border-radius:
+        14px;
+
+      font-size:
+        28px;
+
+      font-weight:
+        700;
+
+      text-align:
+        center;
+
+      line-height:
+        1.4;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.08);
+
+      backdrop-filter:
+        blur(2px);
+
+      -webkit-backdrop-filter:
+        blur(2px);
+    }
+
+
+    /* ===================================
+       メインコンテンツ
+    =================================== */
+
+    main {
+      flex: 1;
+
+      width: 100%;
+
+      padding:
+        30px 20px 50px;
+    }
+
 
     .container {
-      max-width: 600px;
-      margin: 30px auto;
+
+      width: 100%;
+
+      max-width:
+        600px;
+
+      margin:
+        0 auto;
     }
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 24px;
-    }
+
+    /* ===================================
+       マイページカード
+    =================================== */
 
     .card {
-      background: white;
-      padding: 28px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-      text-align: center;
+
+      width: 100%;
+
+      background:
+        rgba(255, 255, 255, 0.95);
+
+      padding:
+        30px;
+
+      border-radius:
+        16px;
+
+      box-shadow:
+        0 5px 18px
+        rgba(0, 0, 0, 0.07);
+
+      text-align:
+        center;
     }
+
+
+    /* ===================================
+       ユーザー名
+    =================================== */
 
     .username {
-      font-size: 16px;
-      color: #777;
-      margin-bottom: 24px;
+
+      font-size:
+        16px;
+
+      color:
+        #777;
+
+      margin-bottom:
+        22px;
+
+      font-weight:
+        600;
     }
 
-    /* キャラクター画像 */
+
+    /* ===================================
+       キャラクター画像
+    =================================== */
+
     .character-icon {
-      width: 180px;
-      height: 180px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 12px;
+
+      width:
+        180px;
+
+      height:
+        180px;
+
+      object-fit:
+        contain;
+
+      display:
+        block;
+
+      margin:
+        0 auto 12px;
     }
+
+
+    /* ===================================
+       キャラクター名
+    =================================== */
 
     .character-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
+
+      font-size:
+        20px;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        10px;
     }
+
+
+    /* ===================================
+       レベル
+    =================================== */
 
     .character-level {
-      font-size: 26px;
-      font-weight: bold;
-      color: #7354c5;
+
+      font-size:
+        28px;
+
+      font-weight:
+        bold;
+
+      color:
+        #7354c5;
     }
+
+
+    /* ===================================
+       EXP
+    =================================== */
 
     .exp-area {
-      margin-top: 30px;
+
+      margin-top:
+        30px;
     }
+
 
     .exp-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 8px;
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      font-size:
+        14px;
+
+      margin-bottom:
+        8px;
+
+      font-weight:
+        600;
     }
+
 
     .exp-bar {
-      width: 100%;
-      height: 14px;
-      background: #eee9ff;
-      border-radius: 10px;
-      overflow: hidden;
+
+      width:
+        100%;
+
+      height:
+        14px;
+
+      background:
+        #eee9ff;
+
+      border-radius:
+        10px;
+
+      overflow:
+        hidden;
     }
+
 
     .exp-fill {
-      width: 0%;
-      height: 100%;
-      background: #a78bfa;
-      border-radius: 10px;
-      transition: width 0.5s ease;
+
+      width:
+        0%;
+
+      height:
+        100%;
+
+      background:
+        #a78bfa;
+
+      border-radius:
+        10px;
+
+      transition:
+        width 0.5s ease;
     }
+
+
+    /* ===================================
+       累計経験値
+    =================================== */
 
     .total-exp {
-      font-size: 14px;
-      color: #888;
-      margin-top: 18px;
+
+      font-size:
+        14px;
+
+      color:
+        #888;
+
+      margin-top:
+        18px;
+
+      margin-bottom:
+        0;
     }
+
+
+    /* ===================================
+       戻るボタン
+    =================================== */
+
+    .back-area {
+
+      text-align:
+        center;
+
+      margin-top:
+        24px;
+    }
+
 
     .back-link {
-      display: inline-block;
-      margin-top: 24px;
-      padding: 12px 20px;
-      background: #eee9ff;
-      color: #7354c5;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: bold;
+
+      display:
+        inline-block;
+
+      padding:
+        12px 22px;
+
+      background:
+        #eee9ff;
+
+      color:
+        #7354c5;
+
+      text-decoration:
+        none;
+
+      border-radius:
+        10px;
+
+      font-size:
+        14px;
+
+      font-weight:
+        bold;
+
+      transition:
+        0.2s;
     }
 
+
     .back-link:hover {
-      background: #ddd3ff;
+
+      background:
+        #ddd3ff;
+
+      transform:
+        translateY(-1px);
     }
+
+
+    /* ===================================
+       RPG風フッター
+    =================================== */
+
+    .rpg-footer {
+
+      width:
+        100%;
+
+      height:
+        220px;
+
+      background-image:
+        url("images/rpg-footer.png");
+
+      background-repeat:
+        no-repeat;
+
+      background-position:
+        center bottom;
+
+      background-size:
+        cover;
+
+      margin-top:
+        auto;
+    }
+
+
+    /* ===================================
+       スマホ
+    =================================== */
+
+    @media
+    (max-width: 600px) {
+
+      .rpg-header {
+
+        height:
+          180px;
+
+        padding-top:
+          25px;
+
+        background-position:
+          center top;
+      }
+
+
+      .page-title {
+
+        font-size:
+          23px;
+
+        padding:
+          8px 18px;
+
+        border-radius:
+          12px;
+      }
+
+
+      main {
+
+        padding:
+          24px 16px 35px;
+      }
+
+
+      .container {
+
+        max-width:
+          100%;
+      }
+
+
+      .card {
+
+        padding:
+          24px 18px;
+      }
+
+
+      .character-icon {
+
+        width:
+          150px;
+
+        height:
+          150px;
+      }
+
+
+      .character-name {
+
+        font-size:
+          19px;
+      }
+
+
+      .character-level {
+
+        font-size:
+          25px;
+      }
+
+
+      .rpg-footer {
+
+        height:
+          160px;
+
+        background-position:
+          center bottom;
+      }
+
+    }
+
 
   </style>
 
 </head>
 
+
 <body>
 
-  <div class="container">
 
-    <h1>マイページ</h1>
+  <!-- ===================================
+       RPGヘッダー
+  =================================== -->
 
-    <div class="card">
+  <header class="rpg-header">
 
-      <!-- ユーザー名 -->
-      <div id="username" class="username">
-        読み込み中...
-      </div>
+    <h1 class="page-title">
+      マイページ
+    </h1>
 
-
-      <!-- キャラクター画像 -->
-      <img
-        id="characterIcon"
-        class="character-icon"
-        src="images/mijuku-slime.png"
-        alt="未熟なスライム"
-      >
+  </header>
 
 
-      <!-- キャラクター名 -->
-      <div id="characterName" class="character-name">
-        未熟なスライム
-      </div>
+
+  <!-- ===================================
+       メイン
+  =================================== -->
+
+  <main>
+
+    <div class="container">
 
 
-      <!-- レベル -->
-      <div id="characterLevel" class="character-level">
-        Lv.1
-      </div>
+      <div class="card">
 
 
-      <!-- EXP -->
-      <div class="exp-area">
+        <!-- ユーザー名 -->
 
-        <div class="exp-info">
+        <div
+          id="username"
+          class="username"
+        >
+          読み込み中...
+        </div>
 
-          <span>EXP</span>
 
-          <span id="expText">
-            0 / 20
-          </span>
+
+        <!-- キャラクター画像 -->
+
+        <img
+          id="characterIcon"
+          class="character-icon"
+          src="images/mijuku-slime.png"
+          alt="未熟なスライム"
+        >
+
+
+
+        <!-- キャラクター名 -->
+
+        <div
+          id="characterName"
+          class="character-name"
+        >
+          未熟なスライム
+        </div>
+
+
+
+        <!-- レベル -->
+
+        <div
+          id="characterLevel"
+          class="character-level"
+        >
+          Lv.1
+        </div>
+
+
+
+        <!-- EXP -->
+
+        <div class="exp-area">
+
+
+          <div class="exp-info">
+
+            <span>
+              EXP
+            </span>
+
+            <span id="expText">
+              0 / 20
+            </span>
+
+          </div>
+
+
+          <div class="exp-bar">
+
+            <div
+              id="expFill"
+              class="exp-fill"
+            ></div>
+
+          </div>
+
 
         </div>
 
-        <div class="exp-bar">
 
-          <div
-            id="expFill"
-            class="exp-fill"
-          ></div>
 
-        </div>
+        <!-- 累計経験値 -->
+
+        <p
+          id="totalExp"
+          class="total-exp"
+        >
+          累計経験値：0 EXP
+        </p>
+
 
       </div>
 
 
-      <!-- 累計経験値 -->
-      <p id="totalExp" class="total-exp">
-        累計経験値：0 EXP
-      </p>
+
+      <!-- 戻る -->
+
+      <div class="back-area">
+
+        <a
+          href="index.html"
+          class="back-link"
+        >
+          ← タスク管理に戻る
+        </a>
+
+      </div>
+
 
     </div>
 
+  </main>
 
-    <a href="index.html" class="back-link">
-      ← タスク管理に戻る
-    </a>
 
-  </div>
+
+  <!-- ===================================
+       RPGフッター
+  =================================== -->
+
+  <footer class="rpg-footer"></footer>
+
 
 
   <script>
+
 
     // =====================================
     // ① Supabaseの設定
@@ -210,13 +680,17 @@
     const SUPABASE_URL =
       "https://weftzcfogzqtskhklyft.supabase.co";
 
+
     const SUPABASE_KEY =
       "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
-    const db = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+
+    const db =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
 
 
     // =====================================
@@ -230,64 +704,117 @@
     const DAILY_GOAL = 5;
 
 
+
     // =====================================
     // ③ レベルアップに必要な累計EXP
-    // index.htmlと同じ設定
     // =====================================
 
     const levelMilestones = [
+
       [1, 0],
+
       [2, 20],
+
       [5, 420],
+
       [15, 1800],
+
       [30, 5400],
+
       [50, 10800]
+
     ];
 
 
-    const levelTable = Array.from(
-      { length: 50 },
-      (_, index) => {
 
-        const level = index + 1;
+    const levelTable =
+      Array.from(
+        {
+          length: 50
+        },
 
-        const upperIndex =
-          levelMilestones.findIndex(
-            ([milestone]) => milestone >= level
-          );
+        (_, index) => {
 
-        const [endLevel, endExp] =
-          levelMilestones[upperIndex];
 
-        if (level === endLevel) {
-          return endExp;
+          const level =
+            index + 1;
+
+
+          const upperIndex =
+            levelMilestones.findIndex(
+              ([milestone]) =>
+                milestone >= level
+            );
+
+
+          const [
+            endLevel,
+            endExp
+          ] =
+            levelMilestones[
+              upperIndex
+            ];
+
+
+          if (
+            level === endLevel
+          ) {
+
+            return endExp;
+
+          }
+
+
+          const [
+            startLevel,
+            startExp
+          ] =
+            levelMilestones[
+              upperIndex - 1
+            ];
+
+
+          const ratio =
+            (
+              level -
+              startLevel
+            )
+            /
+            (
+              endLevel -
+              startLevel
+            );
+
+
+          return Math.round(
+            (
+              startExp +
+              (
+                endExp -
+                startExp
+              ) *
+              ratio
+            )
+            /
+            10
+          ) * 10;
+
         }
+      );
 
-        const [startLevel, startExp] =
-          levelMilestones[upperIndex - 1];
-
-        const ratio =
-          (level - startLevel) /
-          (endLevel - startLevel);
-
-        return Math.round(
-          (
-            startExp +
-            (endExp - startExp) * ratio
-          ) / 10
-        ) * 10;
-
-      }
-    );
 
 
     // =====================================
     // ④ 現在のレベルを計算
     // =====================================
 
-    function calculateLevel(totalExp) {
+    function calculateLevel(
+      totalExp
+    ) {
+
 
       let level = 1;
+
 
       for (
         let i = 0;
@@ -295,11 +822,18 @@
         i++
       ) {
 
-        if (totalExp >= levelTable[i]) {
 
-          level = i + 1;
+        if (
+          totalExp >=
+          levelTable[i]
+        ) {
 
-        } else {
+          level =
+            i + 1;
+
+        }
+
+        else {
 
           break;
 
@@ -307,20 +841,27 @@
 
       }
 
+
       return level;
 
     }
 
 
+
     // =====================================
-    // ⑤ レベルに応じてキャラクターを変更
+    // ⑤ レベルに応じてキャラクター変更
     // =====================================
 
-    function getCharacter(level) {
+    function getCharacter(
+      level
+    ) {
 
 
       // Lv.50
-      if (level >= 50) {
+
+      if (
+        level >= 50
+      ) {
 
         return {
 
@@ -335,8 +876,12 @@
       }
 
 
+
       // Lv.40〜49
-      if (level >= 40) {
+
+      if (
+        level >= 40
+      ) {
 
         return {
 
@@ -351,8 +896,12 @@
       }
 
 
+
       // Lv.30〜39
-      if (level >= 30) {
+
+      if (
+        level >= 30
+      ) {
 
         return {
 
@@ -367,8 +916,12 @@
       }
 
 
+
       // Lv.15〜29
-      if (level >= 15) {
+
+      if (
+        level >= 15
+      ) {
 
         return {
 
@@ -383,8 +936,12 @@
       }
 
 
+
       // Lv.5〜14
-      if (level >= 5) {
+
+      if (
+        level >= 5
+      ) {
 
         return {
 
@@ -399,7 +956,9 @@
       }
 
 
+
       // Lv.1〜4
+
       return {
 
         name:
@@ -413,52 +972,84 @@
     }
 
 
+
     // =====================================
     // ⑥ 完了済みタスクからEXPを計算
     // =====================================
 
-    function calculateTotalExp(tasks) {
+    function calculateTotalExp(
+      tasks
+    ) {
+
 
       const completed =
         tasks.filter(
+
           task =>
-            task.status === "completed" &&
+
+            task.status ===
+              "completed"
+
+            &&
+
             task.completed_at
+
         );
 
 
-      // 日ごとの完了タスク数
+
+      // 日ごとの完了数
 
       const counts = {};
 
 
-      for (const task of completed) {
+
+      for (
+        const task
+        of completed
+      ) {
+
 
         const day =
           new Date(
             task.completed_at
-          ).toLocaleDateString(
+          )
+          .toLocaleDateString(
             "sv-SE"
           );
 
+
         counts[day] =
-          (counts[day] || 0) + 1;
+          (
+            counts[day]
+            ||
+            0
+          )
+          +
+          1;
 
       }
+
 
 
       // 1日5個以上達成した日
 
       const bonusDays =
-        Object.values(counts)
-          .filter(
-            count =>
-              count >= DAILY_GOAL
-          )
-          .length;
+        Object.values(
+          counts
+        )
+        .filter(
+
+          count =>
+            count >=
+            DAILY_GOAL
+
+        )
+        .length;
 
 
-      // EXP計算
+
+      // EXP
 
       return (
 
@@ -475,170 +1066,188 @@
     }
 
 
+
     // =====================================
-    // ⑦ キャラクターを画面に表示
+    // ⑦ キャラクター表示
     // =====================================
 
-    function renderCharacter(totalExp) {
+    function renderCharacter(
+      totalExp
+    ) {
 
-
-      // 現在レベル
 
       const level =
-        calculateLevel(totalExp);
+        calculateLevel(
+          totalExp
+        );
 
-
-      // 現在のキャラクター
 
       const character =
-        getCharacter(level);
+        getCharacter(
+          level
+        );
 
 
-      // ===================================
+
       // キャラクター画像
-      // ===================================
 
       const characterIcon =
         document.getElementById(
           "characterIcon"
         );
 
+
       characterIcon.src =
         character.image;
+
 
       characterIcon.alt =
         character.name;
 
 
-      // ===================================
+
       // キャラクター名
-      // ===================================
 
-      document.getElementById(
-        "characterName"
-      ).textContent =
-        character.name;
+      document
+        .getElementById(
+          "characterName"
+        )
+        .textContent =
+          character.name;
 
 
-      // ===================================
+
       // レベル
-      // ===================================
 
-      document.getElementById(
-        "characterLevel"
-      ).textContent =
-        "Lv." + level;
+      document
+        .getElementById(
+          "characterLevel"
+        )
+        .textContent =
+          "Lv." +
+          level;
 
 
-      // ===================================
+
       // EXPゲージ
-      // ===================================
 
-      if (level === 50) {
-
-        document.getElementById(
-          "expText"
-        ).textContent =
-          "MAX LEVEL";
+      if (
+        level === 50
+      ) {
 
 
-        document.getElementById(
-          "expFill"
-        ).style.width =
-          "100%";
+        document
+          .getElementById(
+            "expText"
+          )
+          .textContent =
+            "MAX LEVEL";
 
-      } else {
 
+        document
+          .getElementById(
+            "expFill"
+          )
+          .style.width =
+            "100%";
 
-        // 現在レベルになるために必要だったEXP
+      }
+
+      else {
+
 
         const currentLevelExp =
-          levelTable[level - 1];
+          levelTable[
+            level - 1
+          ];
 
-
-        // 次レベルに必要な累計EXP
 
         const nextLevelExp =
-          levelTable[level];
+          levelTable[
+            level
+          ];
 
-
-        // 現在レベル内で獲得したEXP
 
         const currentExp =
           totalExp -
           currentLevelExp;
 
 
-        // 次レベルまでに必要なEXP
-
         const requiredExp =
           nextLevelExp -
           currentLevelExp;
 
 
-        // EXPバーの割合
-
         const expPercent =
           (
             currentExp /
             requiredExp
-          ) * 100;
+          )
+          *
+          100;
 
 
-        // EXPテキスト
 
-        document.getElementById(
-          "expText"
-        ).textContent =
-          currentExp +
-          " / " +
-          requiredExp;
+        document
+          .getElementById(
+            "expText"
+          )
+          .textContent =
+            currentExp +
+            " / " +
+            requiredExp;
 
 
-        // EXPバー
 
-        document.getElementById(
-          "expFill"
-        ).style.width =
-          expPercent + "%";
+        document
+          .getElementById(
+            "expFill"
+          )
+          .style.width =
+            expPercent +
+            "%";
 
       }
 
 
-      // ===================================
-      // 累計EXP
-      // ===================================
 
-      document.getElementById(
-        "totalExp"
-      ).textContent =
-        "累計経験値：" +
-        totalExp +
-        " EXP";
+      // 累計EXP
+
+      document
+        .getElementById(
+          "totalExp"
+        )
+        .textContent =
+
+          "累計経験値：" +
+          totalExp +
+          " EXP";
 
     }
 
 
+
     // =====================================
-    // ⑧ マイページのデータを読み込む
+    // ⑧ マイページ読み込み
     // =====================================
 
     async function loadMyPage() {
 
 
-      // ===================================
-      // ログイン中のユーザーを取得
-      // ===================================
+      // ログインユーザー
 
       const {
-        data: authData,
-        error: authError
+
+        data:
+          authData,
+
+        error:
+          authError
+
       } =
         await db.auth.getUser();
 
 
-      // ログインしていなければ
-      // login.htmlへ戻す
 
       if (
         authError ||
@@ -654,26 +1263,48 @@
       }
 
 
+
       const user =
         authData.user;
 
 
+
       // ===================================
-      // ユーザー名を取得
+      // ユーザー名
       // ===================================
 
       const {
-        data: profile,
-        error: profileError
+
+        data:
+          profile,
+
+        error:
+          profileError
+
       } =
         await db
-          .from("profiles")
-          .select("username")
-          .eq("id", user.id)
+
+          .from(
+            "profiles"
+          )
+
+          .select(
+            "username"
+          )
+
+          .eq(
+            "id",
+            user.id
+          )
+
           .single();
 
 
-      if (profileError) {
+
+      if (
+        profileError
+      ) {
+
 
         console.error(
           "プロフィール取得エラー:",
@@ -681,45 +1312,68 @@
         );
 
 
-        document.getElementById(
-          "username"
-        ).textContent =
-          "ユーザー名を取得できませんでした";
+        document
+          .getElementById(
+            "username"
+          )
+          .textContent =
+            "ユーザー名を取得できませんでした";
 
-      } else {
+      }
 
-        document.getElementById(
-          "username"
-        ).textContent =
-          profile.username;
+      else {
+
+
+        document
+          .getElementById(
+            "username"
+          )
+          .textContent =
+            profile.username;
 
       }
 
 
+
       // ===================================
-      // 本人の完了済みタスクを取得
+      // 完了済みタスク
       // ===================================
 
       const {
-        data: tasks,
-        error: tasksError
+
+        data:
+          tasks,
+
+        error:
+          tasksError
+
       } =
         await db
-          .from("tasks")
+
+          .from(
+            "tasks"
+          )
+
           .select(
             "status, completed_at"
           )
+
           .eq(
             "user_id",
             user.id
           )
+
           .eq(
             "status",
             "completed"
           );
 
 
-      if (tasksError) {
+
+      if (
+        tasksError
+      ) {
+
 
         console.error(
           "タスク取得エラー:",
@@ -732,26 +1386,30 @@
           tasksError.message
         );
 
+
         return;
 
       }
 
 
-      // ===================================
-      // EXPを計算
-      // ===================================
+
+      // EXP計算
 
       const totalExp =
-        calculateTotalExp(tasks);
+        calculateTotalExp(
+          tasks
+        );
 
 
-      // ===================================
+
       // キャラクター表示
-      // ===================================
 
-      renderCharacter(totalExp);
+      renderCharacter(
+        totalExp
+      );
 
     }
+
 
 
     // =====================================
@@ -760,7 +1418,9 @@
 
     loadMyPage();
 
+
   </script>
+
 
 </body>
 
