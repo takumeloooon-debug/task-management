@@ -64,84 +64,32 @@ body {
   display: none !important;
 }
 
-  /* ===================================
-   ヘッダー文字の視認性改善
+/* ===================================
+   タイトル
 =================================== */
 
-/* タイトル */
 .header-title {
-
-  /* 半透明の白い背景 */
   background: rgba(255, 255, 255, 0.85);
 
-  /* 文字と背景の間の余白 */
   padding: 8px 20px;
 
-  /* 角を丸くする */
   border-radius: 12px;
 
   /* 背景を文字の幅に合わせる */
   width: fit-content;
 
-  /* 中央配置 */
-  margin-left: auto;
-  margin-right: auto;
-
-  /* 背景画像より前面に表示 */
-  position: relative;
-  z-index: 1;
-
-}
-
-
-/* サブタイトル */
-.header-subtitle {
-
-  background: rgba(255, 255, 255, 0.85);
-
-  padding: 8px 16px;
-
-  border-radius: 12px;
-
-  /* 文字の幅に合わせる */
-  width: fit-content;
-
-  /* 中央配置 */
-  margin: 8px auto 0;
+  /* タイトルそのものを中央配置 */
+  margin: 0 auto 4px;
 
   /* 文字も中央揃え */
   text-align: center;
 
-  /* 背景画像より前面に表示 */
   position: relative;
 
   z-index: 1;
 
-}
-
-
-/* ===================================
-   全体コンテナ
-=================================== */
-
-.container {
-  width: 100%;
-  max-width: 820px;
-
-  margin: 20px auto 0;
-
-  position: relative;
-}
-
-
-/* ===================================
-   タイトル
-=================================== */
-
-h1 {
-  margin: 0 0 4px;
-
   font-size: 34px;
+
   font-weight: 900;
 
   letter-spacing: 1px;
@@ -153,15 +101,39 @@ h1 {
 }
 
 
-.subtitle {
-  margin: 0 0 26px;
+/* ===================================
+   サブタイトル
+=================================== */
 
+.subtitle {
   font-size: 14px;
+
   font-weight: 600;
 
   color: #48617c;
 }
 
+
+.header-subtitle {
+  background: rgba(255, 255, 255, 0.85);
+
+  padding: 8px 16px;
+
+  border-radius: 12px;
+
+  /* 背景を文字の幅に合わせる */
+  width: fit-content;
+
+  /* サブタイトルそのものを中央配置 */
+  margin: 8px auto 26px;
+
+  /* 文字も中央揃え */
+  text-align: center;
+
+  position: relative;
+
+  z-index: 1;
+}
 
 /* ===================================
    共通カード
