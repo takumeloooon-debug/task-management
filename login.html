@@ -2,122 +2,623 @@
 <html lang="ja">
 
 <head>
+
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ログイン | タスク管理アプリ</title>
 
-  <!-- Supabaseのライブラリ -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- 他ページと同じフォント -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+    rel="stylesheet"
+  >
+
+
   <style>
+
+    /* ===================================
+       基本設定
+    =================================== */
 
     * {
       box-sizing: border-box;
     }
 
-    body {
-      font-family: sans-serif;
-      background: #f6f4ff;
-      margin: 0;
-      padding: 20px;
-      color: #333;
+
+    html {
+      min-height: 100%;
     }
+
+
+    body {
+
+      margin: 0;
+
+      padding: 20px;
+
+      min-height: 100vh;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      color:
+        #203354;
+
+
+      /* 青系背景 */
+
+      background:
+        linear-gradient(
+          180deg,
+          #bde8ff 0%,
+          #dff3ff 38%,
+          #f4faff 100%
+        );
+
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+
+    /* ===================================
+       ログインカード
+    =================================== */
 
     .container {
-      max-width: 420px;
-      margin: 80px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+      width: 100%;
+
+      max-width: 430px;
+
+      margin: 30px auto;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.95
+        );
+
+      padding:
+        34px 32px 30px;
+
+      border-radius:
+        18px;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.95
+        );
+
+      box-shadow:
+        0 10px 30px
+        rgba(
+          57,
+          94,
+          135,
+          0.13
+        );
+
+      backdrop-filter:
+        blur(5px);
+
+      position: relative;
+
     }
+
+
+
+    /* カード下部のアクセント */
+
+    .container::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 22px;
+
+      right: 22px;
+
+      bottom: -1px;
+
+      height: 3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(
+            90,
+            160,
+            210,
+            0.25
+          ),
+          transparent
+        );
+
+    }
+
+
+
+    /* ===================================
+       タイトル
+    =================================== */
 
     h1 {
+
       text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
+
+      font-size: 28px;
+
+      font-weight: 900;
+
+      letter-spacing: 1px;
+
+      color: #142c59;
+
+      margin:
+        0 0 10px;
+
+      text-shadow:
+        0 2px 0
+        rgba(
+          255,
+          255,
+          255,
+          0.8
+        );
+
     }
+
+
+
+    /* ===================================
+       説明
+    =================================== */
 
     .description {
+
       text-align: center;
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 30px;
+
+      color: #5e7189;
+
+      font-size: 13px;
+
+      line-height: 1.7;
+
+      margin:
+        0 0 30px;
+
     }
+
+
+
+    /* ===================================
+       ラベル
+    =================================== */
 
     label {
+
       display: block;
+
       margin-top: 20px;
+
       margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: bold;
+
+      font-size: 13px;
+
+      font-weight: 900;
+
+      color: #344d6d;
+
     }
+
+
+
+    /* ===================================
+       入力欄
+    =================================== */
 
     input {
+
+      display: block;
+
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
+
+      min-width: 0;
+
+      padding:
+        13px 14px;
+
+      border:
+        2px solid
+        #d4e2ed;
+
+      border-radius:
+        9px;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      font-size: 14px;
+
+      color: #27364e;
+
+      background:
+        #fbfdff;
+
+      outline: none;
+
+      transition:
+        0.2s;
+
     }
+
+
+
+    input::placeholder {
+
+      color:
+        #a1afbd;
+
+    }
+
+
 
     input:focus {
-      outline: none;
-      border-color: #a99be8;
+
+      background:
+        #ffffff;
+
+      border-color:
+        #72b8e5;
+
+      box-shadow:
+        0 0 0 4px
+        rgba(
+          90,
+          170,
+          220,
+          0.12
+        );
+
     }
+
+
+
+    /* ===================================
+       ログインボタン
+    =================================== */
 
     button {
+
       width: 100%;
-      padding: 13px;
-      margin-top: 25px;
-      background: #a99be8;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+
+      padding:
+        13px;
+
+      margin-top:
+        28px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #65b8e8,
+          #4b9fd3
+        );
+
+      color:
+        white;
+
+      border:
+        none;
+
+      border-radius:
+        9px;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      font-size:
+        15px;
+
+      font-weight:
+        900;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 5px 12px
+        rgba(
+          56,
+          130,
+          180,
+          0.22
+        );
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
+
     }
+
+
 
     button:hover {
-      background: #9180d8;
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 7px 15px
+        rgba(
+          56,
+          130,
+          180,
+          0.28
+        );
+
     }
+
+
+
+    button:active {
+
+      transform:
+        translateY(0);
+
+    }
+
+
 
     button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+
+      opacity:
+        0.6;
+
+      cursor:
+        not-allowed;
+
+      transform:
+        none;
+
     }
+
+
+
+    /* ===================================
+       メッセージ
+    =================================== */
 
     .message {
-      margin-top: 15px;
-      font-size: 14px;
-      text-align: center;
+
+      margin-top:
+        17px;
+
+      margin-bottom:
+        0;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.6;
+
+      text-align:
+        center;
+
     }
+
+
 
     .error {
-      color: #d9534f;
+
+      color:
+        #d9534f;
+
     }
+
+
 
     .success {
-      color: #4caf50;
+
+      color:
+        #31914a;
+
     }
+
+
+
+    /* ===================================
+       新規登録
+    =================================== */
 
     .register-link {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 14px;
+
+      text-align:
+        center;
+
+      margin-top:
+        28px;
+
+      padding-top:
+        23px;
+
+      border-top:
+        1px solid
+        #e7eef4;
+
+      color:
+        #718096;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.8;
+
     }
 
-    a {
-      color: #8874d0;
-      text-decoration: none;
+
+
+    .register-link a {
+
+      display:
+        inline-block;
+
+      padding:
+        9px 15px;
+
+      background:
+        #e7f5ff;
+
+      color:
+        #347fb5;
+
+      text-decoration:
+        none;
+
+      border:
+        1px solid
+        #c9e6f7;
+
+      border-radius:
+        8px;
+
+      font-size:
+        12px;
+
+      font-weight:
+        900;
+
+      transition:
+        0.2s;
+
     }
 
-    a:hover {
-      text-decoration: underline;
+
+
+    .register-link a:hover {
+
+      background:
+        #d7efff;
+
+      transform:
+        translateY(-1px);
+
     }
+
+
+
+    /* ===================================
+       スマホ
+    =================================== */
+
+    @media (
+      max-width: 600px
+    ) {
+
+
+      body {
+
+        padding:
+          18px 14px;
+
+        align-items:
+          flex-start;
+
+      }
+
+
+
+      .container {
+
+        margin:
+          40px auto;
+
+        padding:
+          28px 20px 25px;
+
+        border-radius:
+          15px;
+
+      }
+
+
+
+      h1 {
+
+        font-size:
+          25px;
+
+      }
+
+
+
+      .description {
+
+        font-size:
+          12px;
+
+        margin-bottom:
+          25px;
+
+      }
+
+
+
+      label {
+
+        font-size:
+          12px;
+
+      }
+
+
+
+      input {
+
+        font-size:
+          16px;
+
+      }
+
+
+
+      button {
+
+        font-size:
+          14px;
+
+      }
+
+    }
+
 
   </style>
 
@@ -126,22 +627,36 @@
 
 <body>
 
+
   <div class="container">
 
-    <h1>ログイン</h1>
+
+    <!-- ===================================
+         タイトル
+    =================================== -->
+
+    <h1>
+      ログイン
+    </h1>
+
 
     <p class="description">
       今日も少しずつ、タスクを進めよう！
     </p>
 
 
-    <!-- ログインフォーム -->
+
+    <!-- ===================================
+         ログインフォーム
+    =================================== -->
 
     <form id="loginForm">
+
 
       <label for="email">
         メールアドレス
       </label>
+
 
       <input
         type="email"
@@ -152,9 +667,11 @@
       >
 
 
+
       <label for="password">
         パスワード
       </label>
+
 
       <input
         type="password"
@@ -165,19 +682,33 @@
       >
 
 
-      <button type="submit" id="loginButton">
+
+      <button
+        type="submit"
+        id="loginButton"
+      >
         ログイン
       </button>
+
 
     </form>
 
 
-    <!-- メッセージ表示 -->
 
-    <p id="message" class="message"></p>
+    <!-- ===================================
+         メッセージ
+    =================================== -->
+
+    <p
+      id="message"
+      class="message"
+    ></p>
 
 
-    <!-- 新規登録画面へのリンク -->
+
+    <!-- ===================================
+         新規登録
+    =================================== -->
 
     <div class="register-link">
 
@@ -191,25 +722,32 @@
 
     </div>
 
+
   </div>
 
 
+
   <script>
+
 
     // =====================================
     // ① Supabaseの設定
     // =====================================
 
-    const SUPABASE_URL = "https://weftzcfogzqtskhklyft.supabase.co";
+    const SUPABASE_URL =
+      "https://weftzcfogzqtskhklyft.supabase.co";
 
-    const SUPABASE_KEY = "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
-    // Supabaseクライアントを作成
+    const SUPABASE_KEY =
+      "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
-    const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
 
 
     // =====================================
@@ -217,19 +755,34 @@
     // =====================================
 
     const loginForm =
-      document.getElementById("loginForm");
+      document.getElementById(
+        "loginForm"
+      );
+
 
     const emailInput =
-      document.getElementById("email");
+      document.getElementById(
+        "email"
+      );
+
 
     const passwordInput =
-      document.getElementById("password");
+      document.getElementById(
+        "password"
+      );
+
 
     const loginButton =
-      document.getElementById("loginButton");
+      document.getElementById(
+        "loginButton"
+      );
+
 
     const message =
-      document.getElementById("message");
+      document.getElementById(
+        "message"
+      );
+
 
 
     // =====================================
@@ -238,28 +791,55 @@
 
     async function checkLogin() {
 
-      const { data, error } =
-        await supabaseClient.auth.getUser();
 
-      if (error) {
-        console.log("ログイン状態の確認:", error.message);
+      const {
+        data,
+        error
+      } =
+
+        await supabaseClient
+          .auth
+          .getUser();
+
+
+
+      if (
+        error
+      ) {
+
+
+        console.log(
+          "ログイン状態の確認:",
+          error.message
+        );
+
+
         return;
+
       }
 
-      // ログイン済みなら管理画面へ移動
 
-      if (data.user) {
 
-        window.location.href = "index.html";
+      // ログイン済みなら管理画面へ
+
+      if (
+        data.user
+      ) {
+
+
+        window.location.href =
+          "index.html";
 
       }
 
     }
 
 
-    // ページを開いたときに実行
+
+    // ページ表示時に確認
 
     checkLogin();
+
 
 
     // =====================================
@@ -267,106 +847,176 @@
     // =====================================
 
     loginForm.addEventListener(
-      "submit",
-      async function(event) {
 
-        // フォームの標準送信を停止
+      "submit",
+
+      async function(
+        event
+      ) {
+
 
         event.preventDefault();
 
 
-        // 入力された値を取得
 
-        const email = emailInput.value.trim();
-
-        const password = passwordInput.value;
-
-
-        // ボタンを一時的に無効化
-
-        loginButton.disabled = true;
-
-        loginButton.textContent = "ログイン中...";
+        const email =
+          emailInput
+            .value
+            .trim();
 
 
-        // メッセージを初期化
-
-        message.textContent = "";
-
-        message.className = "message";
+        const password =
+          passwordInput
+            .value;
 
 
-        // =====================================
-        // ⑤ Supabaseでログイン
-        // =====================================
+
+        // ボタン無効化
+
+        loginButton.disabled =
+          true;
+
+
+        loginButton.textContent =
+          "ログイン中...";
+
+
+
+        // メッセージ初期化
+
+        message.textContent =
+          "";
+
+
+        message.className =
+          "message";
+
+
 
         try {
 
-          const { data, error } =
-            await supabaseClient.auth.signInWithPassword({
 
-              email: email,
+          // =====================================
+          // Supabaseでログイン
+          // =====================================
 
-              password: password
+          const {
+            data,
+            error
+          } =
 
-            });
+            await supabaseClient
+              .auth
+              .signInWithPassword({
+
+                email:
+                  email,
+
+                password:
+                  password
+
+              });
 
 
+
+          // =====================================
           // ログイン失敗
+          // =====================================
 
-          if (error) {
+          if (
+            error
+          ) {
+
 
             message.textContent =
               "ログインに失敗しました。メールアドレスとパスワードを確認してください。";
 
-            message.className = "message error";
 
-            console.error(error);
+            message.className =
+              "message error";
+
+
+            console.error(
+              error
+            );
+
 
             return;
 
           }
 
 
+
           // =====================================
-// ⑥ ログイン成功
-// =====================================
+          // ログイン成功
+          // =====================================
 
-if (data.user) {
+          if (
+            data.user
+          ) {
 
-  message.textContent = "ログインに成功しました！";
-  message.className = "message success";
 
-  console.log("ログイン成功。index.htmlへ移動します");
+            message.textContent =
+              "ログインに成功しました！";
 
-  // index.htmlへ移動
-  window.location.assign("./index.html");
 
-}
+            message.className =
+              "message success";
 
-        } catch (error) {
 
-          console.error(error);
+            console.log(
+              "ログイン成功。index.htmlへ移動します"
+            );
+
+
+            window.location.assign(
+              "./index.html"
+            );
+
+          }
+
+
+        }
+
+        catch (
+          error
+        ) {
+
+
+          console.error(
+            error
+          );
+
 
           message.textContent =
             "通信エラーが発生しました。時間をおいて再度お試しください。";
 
-          message.className = "message error";
 
-        } finally {
+          message.className =
+            "message error";
 
-          // ボタンを元に戻す
 
-          loginButton.disabled = false;
+        }
 
-          loginButton.textContent = "ログイン";
+        finally {
+
+
+          loginButton.disabled =
+            false;
+
+
+          loginButton.textContent =
+            "ログイン";
 
         }
 
       }
+
     );
 
+
   </script>
+
 
 </body>
 
