@@ -1029,10 +1029,8 @@ button:active {
 
   background-repeat: no-repeat;
 
-  /* PC：画面幅に合わせて画像全体を表示 */
   background-size: 100% auto;
 
-  /* 画像の右下を基準に配置 */
   background-position: right bottom;
 
   image-rendering: pixelated;
@@ -1040,6 +1038,12 @@ button:active {
   pointer-events: none;
 
   z-index: 0;
+
+  /* フッターとコンテンツの距離を調整 */
+  margin-top: -50px;
+
+  /* フッター下部の余白をなくす */
+  margin-bottom: 0;
 
 }
 
@@ -1052,24 +1056,31 @@ button:active {
 
   .rpg-footer-background {
 
-    /* スマホでは背景の表示エリアを固定 */
     height: 180px;
 
-    /* PC用の縦横比指定を解除 */
     aspect-ratio: auto;
 
-    /*
-      ヘッダーと同じサイズで表示し、
-      画像の右側を固定する
-    */
     background-size: 900px auto;
 
     background-position: right bottom;
 
-    /* フッターを上に移動 */
-  margin-top: -50px;
+    margin-bottom: 0;
 
   }
+
+}
+
+
+/* ===================================
+   ページ全体の余白調整
+=================================== */
+
+html,
+body {
+
+  margin-bottom: 0;
+
+  padding-bottom: 0;
 
 }
 
