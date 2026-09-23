@@ -2,132 +2,637 @@
 <html lang="ja">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>新規登録 | タスク管理アプリ</title>
 
-  <!-- Supabaseのライブラリ -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- 他ページと同じフォント -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
+
+    /* ===================================
+       基本設定
+    =================================== */
 
     * {
       box-sizing: border-box;
     }
 
-    body {
-      font-family: sans-serif;
-      background: #f6f4ff;
-      margin: 0;
-      padding: 20px;
-      color: #333;
+
+    html {
+      min-height: 100%;
     }
+
+
+    body {
+
+      margin: 0;
+
+      padding: 20px;
+
+      min-height: 100vh;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      color:
+        #203354;
+
+
+      /* ログイン画面と同じ青系背景 */
+
+      background:
+        linear-gradient(
+          180deg,
+          #bde8ff 0%,
+          #dff3ff 38%,
+          #f4faff 100%
+        );
+
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+
+    /* ===================================
+       新規登録カード
+    =================================== */
 
     .container {
-      max-width: 420px;
-      margin: 80px auto;
-      background: white;
-      padding: 32px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+      width: 100%;
+
+      max-width: 430px;
+
+      margin: 30px auto;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          0.95
+        );
+
+      padding:
+        34px 32px 30px;
+
+      border-radius:
+        18px;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.95
+        );
+
+      box-shadow:
+        0 10px 30px
+        rgba(
+          57,
+          94,
+          135,
+          0.13
+        );
+
+      backdrop-filter:
+        blur(5px);
+
+      position: relative;
+
     }
+
+
+
+    /* カード下部アクセント */
+
+    .container::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 22px;
+
+      right: 22px;
+
+      bottom: -1px;
+
+      height: 3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(
+            90,
+            160,
+            210,
+            0.25
+          ),
+          transparent
+        );
+
+    }
+
+
+
+    /* ===================================
+       タイトル
+    =================================== */
 
     h1 {
+
       text-align: center;
-      font-size: 24px;
-      margin-bottom: 8px;
+
+      font-size: 28px;
+
+      font-weight: 900;
+
+      letter-spacing: 1px;
+
+      color:
+        #142c59;
+
+      margin:
+        0 0 10px;
+
+      text-shadow:
+        0 2px 0
+        rgba(
+          255,
+          255,
+          255,
+          0.8
+        );
+
     }
+
+
+
+    /* ===================================
+       説明
+    =================================== */
 
     .description {
+
       text-align: center;
-      font-size: 14px;
-      color: #777;
-      margin-bottom: 32px;
+
+      color:
+        #5e7189;
+
+      font-size:
+        13px;
+
+      line-height:
+        1.7;
+
+      margin:
+        0 0 30px;
+
     }
+
+
+
+    /* ===================================
+       ラベル
+    =================================== */
 
     label {
+
       display: block;
-      margin-top: 20px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: bold;
+
+      margin-top:
+        20px;
+
+      margin-bottom:
+        8px;
+
+      font-size:
+        13px;
+
+      font-weight:
+        900;
+
+      color:
+        #344d6d;
+
     }
+
+
+
+    /* ===================================
+       入力欄
+    =================================== */
 
     input {
+
+      display: block;
+
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      background: #fafafa;
+
+      min-width: 0;
+
+      padding:
+        13px 14px;
+
+      border:
+        2px solid
+        #d4e2ed;
+
+      border-radius:
+        9px;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      font-size:
+        14px;
+
+      color:
+        #27364e;
+
+      background:
+        #fbfdff;
+
+      outline:
+        none;
+
+      transition:
+        0.2s;
+
     }
+
+
+
+    input::placeholder {
+
+      color:
+        #a1afbd;
+
+    }
+
+
 
     input:focus {
-      outline: none;
-      border-color: #9b8ce5;
-      background: white;
+
+      background:
+        #ffffff;
+
+      border-color:
+        #72b8e5;
+
+      box-shadow:
+        0 0 0 4px
+        rgba(
+          90,
+          170,
+          220,
+          0.12
+        );
+
     }
+
+
+
+    /* ===================================
+       新規登録ボタン
+    =================================== */
 
     button {
-      width: 100%;
-      margin-top: 28px;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #9b8ce5;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+
+      width:
+        100%;
+
+      margin-top:
+        28px;
+
+      padding:
+        13px;
+
+      border:
+        none;
+
+      border-radius:
+        9px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #65b8e8,
+          #4b9fd3
+        );
+
+      color:
+        white;
+
+      font-family:
+        "DotGothic16",
+        sans-serif;
+
+      font-size:
+        15px;
+
+      font-weight:
+        900;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 5px 12px
+        rgba(
+          56,
+          130,
+          180,
+          0.22
+        );
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
+
     }
+
+
 
     button:hover {
-      background: #8574d8;
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 7px 15px
+        rgba(
+          56,
+          130,
+          180,
+          0.28
+        );
+
     }
+
+
+
+    button:active {
+
+      transform:
+        translateY(0);
+
+    }
+
+
 
     button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+
+      opacity:
+        0.6;
+
+      cursor:
+        not-allowed;
+
+      transform:
+        none;
+
     }
+
+
+
+    /* ===================================
+       メッセージ
+    =================================== */
 
     .message {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.6;
-      white-space: pre-line;
+
+      margin-top:
+        20px;
+
+      margin-bottom:
+        0;
+
+      text-align:
+        center;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.7;
+
+      white-space:
+        pre-line;
+
     }
+
+
 
     .success {
-      color: #24834b;
+
+      color:
+        #31914a;
+
     }
+
+
 
     .error {
-      color: #d93025;
+
+      color:
+        #d9534f;
+
     }
+
+
+
+    /* ===================================
+       ログインリンク
+    =================================== */
 
     .login-link {
-      text-align: center;
-      margin-top: 28px;
-      font-size: 14px;
+
+      text-align:
+        center;
+
+      margin-top:
+        28px;
+
+      padding-top:
+        23px;
+
+      border-top:
+        1px solid
+        #e7eef4;
+
+      color:
+        #718096;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.8;
+
     }
 
-    a {
-      color: #8574d8;
-      text-decoration: none;
-      font-weight: bold;
+
+
+    .login-link a {
+
+      display:
+        inline-block;
+
+      margin-top:
+        12px;
+
+      padding:
+        9px 15px;
+
+      background:
+        #e7f5ff;
+
+      color:
+        #347fb5;
+
+      text-decoration:
+        none;
+
+      border:
+        1px solid
+        #c9e6f7;
+
+      border-radius:
+        8px;
+
+      font-size:
+        12px;
+
+      font-weight:
+        900;
+
+      transition:
+        0.2s;
+
     }
 
-    a:hover {
-      text-decoration: underline;
+
+
+    .login-link a:hover {
+
+      background:
+        #d7efff;
+
+      transform:
+        translateY(-1px);
+
     }
 
-    @media (max-width: 480px) {
+
+
+    /* ===================================
+       スマホ
+    =================================== */
+
+    @media (max-width: 600px) {
+
+
+      body {
+
+        padding:
+          18px 14px;
+
+        align-items:
+          flex-start;
+
+      }
+
+
 
       .container {
-        margin: 40px auto;
-        padding: 24px;
+
+        margin:
+          40px auto;
+
+        padding:
+          28px 20px 25px;
+
+        border-radius:
+          15px;
+
+      }
+
+
+
+      h1 {
+
+        font-size:
+          25px;
+
+      }
+
+
+
+      .description {
+
+        font-size:
+          12px;
+
+        margin-bottom:
+          25px;
+
+      }
+
+
+
+      label {
+
+        font-size:
+          12px;
+
+      }
+
+
+
+      /* iPhoneの入力時ズーム対策 */
+
+      input {
+
+        font-size:
+          16px;
+
+      }
+
+
+
+      button {
+
+        font-size:
+          14px;
+
       }
 
     }
@@ -136,23 +641,42 @@
 
 </head>
 
+
+
 <body>
+
 
   <div class="container">
 
-    <h1>新規登録</h1>
+
+    <!-- ===================================
+         タイトル
+    =================================== -->
+
+    <h1>
+      新規登録
+    </h1>
+
 
     <p class="description">
       アカウントを作成して、タスク管理を始めよう！
     </p>
 
+
+
+    <!-- ===================================
+         新規登録フォーム
+    =================================== -->
+
     <form id="signupForm">
+
 
       <!-- ユーザー名 -->
 
       <label for="username">
         ユーザー名
       </label>
+
 
       <input
         type="text"
@@ -164,11 +688,13 @@
       >
 
 
+
       <!-- メールアドレス -->
 
       <label for="email">
         メールアドレス
       </label>
+
 
       <input
         type="email"
@@ -179,11 +705,13 @@
       >
 
 
+
       <!-- パスワード -->
 
       <label for="password">
         パスワード
       </label>
+
 
       <input
         type="password"
@@ -195,25 +723,43 @@
       >
 
 
+
       <!-- 登録ボタン -->
 
-      <button type="submit" id="signupButton">
+      <button
+        type="submit"
+        id="signupButton"
+      >
         新規登録
       </button>
+
 
     </form>
 
 
-    <!-- メッセージ表示 -->
 
-    <div id="message" class="message" role="status" aria-live="polite"></div>
+    <!-- ===================================
+         メッセージ
+    =================================== -->
+
+    <div
+      id="message"
+      class="message"
+      role="status"
+      aria-live="polite"
+    ></div>
 
 
-    <!-- ログイン画面へのリンク -->
+
+    <!-- ===================================
+         ログイン画面へのリンク
+    =================================== -->
 
     <div class="login-link">
 
-      すでにアカウントをお持ちの方は<br>
+      すでにアカウントをお持ちの方は
+
+      <br>
 
       <a href="login.html">
         ログインはこちら
@@ -221,23 +767,32 @@
 
     </div>
 
+
   </div>
 
 
+
   <script>
+
 
     // ========================================
     // ① Supabaseの接続設定
     // ========================================
 
-    const SUPABASE_URL = "https://weftzcfogzqtskhklyft.supabase.co";
+    const SUPABASE_URL =
+      "https://weftzcfogzqtskhklyft.supabase.co";
 
-    const SUPABASE_KEY = "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
 
-    const db = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+    const SUPABASE_KEY =
+      "sb_publishable_Ue3wX3hwEheWaZAdidm2Fw_cSy3EAj3";
+
+
+    const db =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
 
 
     // ========================================
@@ -245,26 +800,43 @@
     // ========================================
 
     const signupForm =
-      document.getElementById("signupForm");
+      document.getElementById(
+        "signupForm"
+      );
+
 
     const signupButton =
-      document.getElementById("signupButton");
+      document.getElementById(
+        "signupButton"
+      );
+
 
     const message =
-      document.getElementById("message");
+      document.getElementById(
+        "message"
+      );
+
 
 
     // ========================================
     // ③ メッセージ表示
     // ========================================
 
-    function showMessage(text, type) {
+    function showMessage(
+      text,
+      type
+    ) {
 
-      message.textContent = text;
 
-      message.className = "message " + type;
+      message.textContent =
+        text;
+
+
+      message.className =
+        "message " + type;
 
     }
+
 
 
     // ========================================
@@ -272,85 +844,171 @@
     // ========================================
 
     signupForm.addEventListener(
-      "submit",
-      async (event) => {
 
-        // フォーム送信によるページ更新を防ぐ
+      "submit",
+
+      async (
+        event
+      ) => {
+
+
         event.preventDefault();
 
-        // 入力内容を取得
+
+
+        // =====================================
+        // 入力内容
+        // =====================================
+
         const username =
-          document.getElementById("username").value.trim();
+          document
+            .getElementById(
+              "username"
+            )
+            .value
+            .trim();
+
 
         const email =
-          document.getElementById("email").value.trim();
+          document
+            .getElementById(
+              "email"
+            )
+            .value
+            .trim();
+
 
         const password =
-          document.getElementById("password").value;
+          document
+            .getElementById(
+              "password"
+            )
+            .value;
 
 
-        // 入力チェック
+
+        // =====================================
+        // ユーザー名チェック
+        // =====================================
+
         if (
-          username.length < 3 ||
+
+          username.length < 3
+
+          ||
+
           username.length > 30
+
         ) {
 
+
           showMessage(
+
             "ユーザー名は3〜30文字で入力してください。",
+
             "error"
+
           );
+
 
           return;
 
         }
 
 
-        if (password.length < 8) {
+
+        // =====================================
+        // パスワードチェック
+        // =====================================
+
+        if (
+          password.length < 8
+        ) {
+
 
           showMessage(
+
             "パスワードは8文字以上で入力してください。",
+
             "error"
+
           );
+
 
           return;
 
         }
 
 
-        // ボタンの連続クリックを防ぐ
-        signupButton.disabled = true;
+
+        // =====================================
+        // 連打防止
+        // =====================================
+
+        signupButton.disabled =
+          true;
+
+
+        signupButton.textContent =
+          "登録中...";
+
 
         showMessage(
+
           "登録処理中です...",
+
           ""
+
         );
+
 
 
         try {
 
-          // ========================================
-          // ⑤ Supabaseにユーザーを登録
-          // ========================================
 
-          const { data, error } =
+          // =====================================
+          // Supabaseにユーザー登録
+          // =====================================
+
+          const {
+            data,
+            error
+          } =
+
             await db.auth.signUp({
 
-              email: email,
 
-              password: password,
+              email:
+                email,
+
+
+              password:
+                password,
+
 
               options: {
 
-                // ユーザー名を認証情報のメタデータに保存
+
+                // ユーザー名
+
                 data: {
-                  username: username
+
+                  username:
+                    username
+
                 },
 
-                // メール認証後の移動先
+
+                // メール認証後
+
                 emailRedirectTo:
+
                   new URL(
+
                     "login.html",
+
                     window.location.href
+
                   ).href
 
               }
@@ -358,52 +1016,100 @@
             });
 
 
-          if (error) {
+
+          if (
+            error
+          ) {
+
             throw error;
+
           }
 
 
-          // ========================================
-          // ⑥ 登録完了メッセージ
-          // ========================================
 
-          if (data.user) {
+          // =====================================
+          // 登録完了
+          // =====================================
+
+          if (
+            data.user
+          ) {
+
 
             showMessage(
+
               "登録を受け付けました！\n確認メールを送信しました。\nメール内のリンクから認証を完了してください。",
+
               "success"
+
             );
+
 
             signupForm.reset();
 
-          } else {
+
+          }
+
+          else {
+
 
             showMessage(
+
               "登録状況を確認できませんでした。時間をおいて再度お試しください。",
+
               "error"
+
             );
 
           }
 
-        } catch (error) {
 
-          console.error(error);
+        }
 
-          showMessage(
-            "登録に失敗しました。\n" + error.message,
-            "error"
+        catch (
+          error
+        ) {
+
+
+          console.error(
+            error
           );
 
-        } finally {
 
-          signupButton.disabled = false;
+          showMessage(
+
+            "登録に失敗しました。\n"
+
+            +
+
+            error.message,
+
+            "error"
+
+          );
+
+
+        }
+
+        finally {
+
+
+          signupButton.disabled =
+            false;
+
+
+          signupButton.textContent =
+            "新規登録";
 
         }
 
       }
+
     );
 
+
   </script>
+
 
 </body>
 
